@@ -4,7 +4,7 @@ import Footer from './footer';
 import Cart from './cart';
 import { QUERY_CART } from '../graphql/queries';
 import { useQuery } from '@apollo/client';
-import Meta from './Meta';
+import Meta from './meta';
 
 interface LayoutProps {
   children: React.ReactChild;
