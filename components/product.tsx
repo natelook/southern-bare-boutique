@@ -101,12 +101,14 @@ export default function Product({
               <h2 className='sr-only'>Images</h2>
               <div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
                 <div className='lg:col-span-2 lg:row-span-2'>
-                  <Image
-                    width={featuredImage.width}
-                    height={featuredImage.height}
-                    src={featuredImage.url}
-                    alt={featuredImage.altText}
-                  />
+                  {featuredImage && (
+                    <Image
+                      width={featuredImage.width}
+                      height={featuredImage.height}
+                      src={featuredImage.url}
+                      alt={featuredImage.altText}
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -123,29 +125,30 @@ export default function Product({
                       Choose a size
                     </RadioGroup.Label>
                     <div className='grid grid-cols-3 gap-3 sm:grid-cols-5'>
-                      {sizes.map(({ node }) => (
-                        <RadioGroup.Option
-                          key={node.id}
-                          value={node.id}
-                          className={({ active, checked }) =>
-                            classNames(
-                              !node.currentlyNotInStock
-                                ? 'cursor-pointer focus:outline-none'
-                                : 'opacity-25 cursor-not-allowed',
-                              active ? 'ring-2 ring-offset-2 ring-blue' : '',
-                              checked
-                                ? 'bg-blue border-transparent text-white hover:bg-blue'
-                                : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
-                              'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1'
-                            )
-                          }
-                          disabled={node.currentlyNotInStock}
-                        >
-                          <RadioGroup.Label as='p'>
-                            {node.title}
-                          </RadioGroup.Label>
-                        </RadioGroup.Option>
-                      ))}
+                      {sizes &&
+                        sizes.map(({ node }) => (
+                          <RadioGroup.Option
+                            key={node.id}
+                            value={node.id}
+                            className={({ active, checked }) =>
+                              classNames(
+                                !node.currentlyNotInStock
+                                  ? 'cursor-pointer focus:outline-none'
+                                  : 'opacity-25 cursor-not-allowed',
+                                active ? 'ring-2 ring-offset-2 ring-blue' : '',
+                                checked
+                                  ? 'bg-blue border-transparent text-white hover:bg-blue'
+                                  : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
+                                'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1'
+                              )
+                            }
+                            disabled={node.currentlyNotInStock}
+                          >
+                            <RadioGroup.Label as='p'>
+                              {node.title}
+                            </RadioGroup.Label>
+                          </RadioGroup.Option>
+                        ))}
                     </div>
                   </RadioGroup>
                 </div>
