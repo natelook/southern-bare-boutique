@@ -40,26 +40,28 @@ export default function Header({ openCart, cartItems }: HeaderProps) {
               </a>
             </Link>
           </div>
-          <ul className='flex items-center space-x-4'>
-            <li className='font-bold uppercase'>
-              <span
-                className='flex items-center space-x-1'
-                onClick={() => setCategoriesOpen(!isCategoriesOpen)}
-              >
-                <span>Categories</span>{' '}
+          <ul className='flex items-center space-x-1 md:space-x-4 text-sm md:text-base'>
+            <li className='flex flex-col-reverse md:flex-row space-x-5'>
+              <div className='font-bold uppercase'>
                 <span
-                  className={classNames('transition', {
-                    'rotate-180': isCategoriesOpen,
-                  })}
+                  className='flex items-center md:space-x-1'
+                  onClick={() => setCategoriesOpen(!isCategoriesOpen)}
                 >
-                  <BsChevronDown />
+                  <span>Categories</span>{' '}
+                  <span
+                    className={classNames('transition', {
+                      'rotate-180': isCategoriesOpen,
+                    })}
+                  >
+                    <BsChevronDown />
+                  </span>
                 </span>
-              </span>
-            </li>
-            <li className='font-bold uppercase'>
-              <Link href='/shop'>
-                <a>Shop</a>
-              </Link>
+              </div>
+              <div className='font-bold uppercase'>
+                <Link href='/shop'>
+                  <a>Shop</a>
+                </Link>
+              </div>
             </li>
             <li className='block h-6 w-6 relative' onClick={openCart}>
               <ShoppingBagIcon />
