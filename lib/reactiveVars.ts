@@ -1,3 +1,3 @@
 import { makeVar } from '@apollo/client';
 
-export const cartItemsVar = makeVar<any | null>(null);
+export const cartIdVar = makeVar<string | null>(null);

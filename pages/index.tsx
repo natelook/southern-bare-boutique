@@ -8,9 +8,6 @@ import client from '../lib/apollo';
 Home.title = 'Home';
 
 export default function Home({ data }: any) {
-  // const { data } = useQuery(PRODUCTS, {
-  //   variables: { list: 12, featuredHeight: 640, featuredWidth: 560 },
-  // });
   return (
     <main className='bg-white'>
       <section className='grid md:grid-cols-2 container mx-auto py-16 md:py-5'>

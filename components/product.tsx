@@ -12,7 +12,7 @@ import {
 import { useMutation, useQuery } from '@apollo/client';
 import ProductCard from './product-card';
 import { AnimatePresence, motion } from 'framer-motion';
-import { cartItemsVar } from '../lib/reactiveVars';
+import { cartIdVar } from '../lib/reactiveVars';
 import client from '../lib/apollo';
 
 const product = {
@@ -82,6 +82,7 @@ export default function Product({
       const { data: cartCreation } = await createCart({
         variables: { itemId: selectedSize },
       });
+      cartIdVar(cartCreation.cartCreate.cart.id);
       window.localStorage.setItem('cartId', cartCreation.cartCreate.cart.id);
     } else {
       // Add to currently stored cart

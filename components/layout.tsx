@@ -5,7 +5,7 @@ import Cart from './cart';
 import { QUERY_CART } from '../graphql/queries';
 import { useQuery } from '@apollo/client';
 import Meta from './meta';
-import { cartItemsVar } from '../lib/reactiveVars';
+import { cartIdVar } from '../lib/reactiveVars';
 import GoogleAnalytics from './ga';
 import classNames from 'classnames';
 
@@ -18,23 +18,38 @@ export default function Layout({ children, title }: LayoutProps) {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartId, setCartId] = useState<string | null>(null);
 
-  const { data, loading } = useQuery(QUERY_CART, {
+  const { data, loading, refetch } = useQuery(QUERY_CART, {
     variables: {
-      cartId,
+      cartId: cartIdVar(),
     },
   });
 
   useEffect(() => {
     if (window.localStorage.getItem('cartId')) {
       setCartId(window.localStorage.getItem('cartId'));
+      cartIdVar(window.localStorage.getItem('cartId'));
     }
   }, []);
 
   useEffect(() => {
-    if (cartId && data) {
-      cartItemsVar(data.cart.lines.edges);
+    if (cartIdVar()) {
+      console.log('fired', cartIdVar());
+      refetch();
     }
-  }, [cartId, data]);
+  }, [refetch]);
+
+  // useEffect(() => {
+  //   function getCartId() {
+  //     console.log(localStorage.getItem('cartId'));
+  //     console.log('refetching', cartIdVar());
+  //     setCartId(cartIdVar());
+  //     refetch();
+  //   }
+
+  //   window.addEventListener('', getCartId);
+
+  //   return () => window.removeEventListener('storage', getCartId);
+  // }, [refetch]);
 
   const cartItems = data?.cart?.lines.edges.length;
 
