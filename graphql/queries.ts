@@ -269,6 +269,11 @@ export const QUERY_FEATURED_COLLECTION = gql`
             featuredImage {
               url(transform: { crop: TOP, maxHeight: 545, maxWidth: 363 })
             }
+            priceRange {
+              minVariantPrice {
+                amount
+              }
+            }
           }
         }
       }

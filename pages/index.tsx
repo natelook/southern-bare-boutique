@@ -55,13 +55,26 @@ export default function Home({ data, featured }: any) {
                     transition={{ duration: 0.5 }}
                     className='relative h-full'
                   >
-                    <Image
-                      src={node.featuredImage.url}
-                      height='545'
-                      width='363'
-                      alt='Product'
-                      priority
-                    />
+                    <Link href={`/shop/${node.handle}`}>
+                      <a>
+                        <Image
+                          src={node.featuredImage.url}
+                          height='545'
+                          width='363'
+                          alt='Product'
+                          priority
+                        />
+                        <div className='absolute text-white font-bold w-full left-0 bottom-1 bg-gradient-to-t from-dark to-transparent py-2 px-3 capitalize flex justify-between'>
+                          <span>{node.title}</span>
+                          <span>
+                            $
+                            {Number(
+                              node.priceRange.minVariantPrice.amount
+                            ).toFixed(2)}
+                          </span>
+                        </div>
+                      </a>
+                    </Link>
                   </motion.div>
                 )}
               </React.Fragment>
