@@ -32,7 +32,7 @@ export default function Home({ data }: any) {
         <div className='md:flex justify-center hidden'>
           <div className='drop-shadow-lg relative z-10'>
             <Image
-              src='/dev/image1.png'
+              src='/sample.png'
               height='545.5'
               width='363.5'
               alt='Product'
