@@ -1,13 +1,30 @@
 import { useQuery } from '@apollo/client';
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 import ProductCard from '../components/product-card';
-import { PRODUCTS } from '../graphql/queries';
+import { PRODUCTS, QUERY_FEATURED_COLLECTION } from '../graphql/queries';
 import client from '../lib/apollo';
 
 Home.title = 'Home';
 
-export default function Home({ data }: any) {
+export default function Home({ data, featured }: any) {
+  // const [slide, setSlide] = useState(1);
+  // useEffect(() => {
+  //   const totalProducts = featured.collection.products.edges.length;
+
+  //   setTimeout(() => {
+  //     if (slide == totalProducts) {
+  //       setSlide(1);
+  //     } else {
+  //       setSlide(slide + 1);
+  //     }
+  //     console.log(totalProducts < slide, { totalProducts, slide });
+  //   }, 5000);
+
+  //   return () => clearTimeout();
+  // }, [slide, featured]);
   return (
     <main className='bg-white'>
       <section className='grid md:grid-cols-2 container mx-auto py-16 md:py-5'>
@@ -27,15 +44,29 @@ export default function Home({ data }: any) {
           </div>
         </div>
         <div className='md:flex justify-center hidden'>
-          <div className='relative'>
-            <Image
-              src='/sample.png'
-              height='545.5'
-              width='363.5'
-              alt='Product'
-              priority
-            />
-          </div>
+          {featured.collection.products.edges.map(
+            ({ node }: any, i: number) => (
+              <React.Fragment key={i}>
+                {i === 0 && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className='relative h-full'
+                  >
+                    <Image
+                      src={node.featuredImage.url}
+                      height='545'
+                      width='363'
+                      alt='Product'
+                      priority
+                    />
+                  </motion.div>
+                )}
+              </React.Fragment>
+            )
+          )}
         </div>
       </section>
       <section className='bg-dark py-10'>
@@ -71,5 +102,8 @@ export async function getStaticProps() {
     query: PRODUCTS,
     variables: { list: 12, featuredHeight: 640, featuredWidth: 560 },
   });
-  return { props: { data } };
+  const { data: featured } = await client.query({
+    query: QUERY_FEATURED_COLLECTION,
+  });
+  return { props: { data, featured } };
 }

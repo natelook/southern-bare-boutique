@@ -256,3 +256,22 @@ export const QUERY_BY_PRODUCT_TYPE = gql`
     }
   }
 `;
+
+export const QUERY_FEATURED_COLLECTION = gql`
+  {
+    collection(handle: "featured") {
+      title
+      products(first: 5) {
+        edges {
+          node {
+            handle
+            title
+            featuredImage {
+              url(transform: { crop: TOP, maxHeight: 545, maxWidth: 363 })
+            }
+          }
+        }
+      }
+    }
+  }
+`;
