@@ -151,7 +151,7 @@ export default function Product({
                                 checked
                                   ? 'bg-blue border-transparent text-white hover:bg-blue'
                                   : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
-                                'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1'
+                                'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1 w-full'
                               )
                             }
                             disabled={node.currentlyNotInStock}
