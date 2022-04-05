@@ -225,3 +225,36 @@ export const REMOVE_ITEM_FROM_CART = gql`
     }
   }
 `;
+
+export const GET_PRODUCT_TYPES = gql`
+  {
+    productTypes(first: 5) {
+      edges {
+        node
+        cursor
+      }
+    }
+  }
+`;
+
+export const QUERY_BY_PRODUCT_TYPE = gql`
+  query queryByProductType($query: String!) {
+    products(query: $query, first: 15) {
+      edges {
+        node {
+          id
+          title
+          handle
+          priceRange {
+            minVariantPrice {
+              amount
+            }
+          }
+          featuredImage {
+            url(transform: { crop: TOP, maxWidth: 600, maxHeight: 600 })
+          }
+        }
+      }
+    }
+  }
+`;

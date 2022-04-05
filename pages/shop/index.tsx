@@ -1,3 +1,4 @@
+import PageContainer from '../../components/page-container';
 import ProductCard from '../../components/product-card';
 import { PRODUCTS } from '../../graphql/queries';
 import client from '../../lib/apollo';
@@ -27,24 +28,23 @@ interface Props {
 ShopPage.title = 'Shop';
 
 export default function ShopPage({ products }: Props) {
-  console.log({ products });
   return (
-    <div className='bg-white'>
+    <PageContainer>
       <div className='container mx-auto pb-28'>
         <h1 className='text-5xl py-10 font-sacramento pt-16'>Shop</h1>
         <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10 px-4'>
           {products.edges.map(({ node }) => (
             <ProductCard
               key={node.id}
-              href={`/shop/${node.handle}`}
-              image={node.featuredImage.url}
+              href={node.handle}
+              image={node.featuredImage?.url}
               name={node.title}
               price={node.priceRange.minVariantPrice.amount}
             />
           ))}
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }
 

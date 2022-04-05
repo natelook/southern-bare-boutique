@@ -26,7 +26,7 @@ export default function Cart({
   useEffect(() => {
     setInnerHeight(window.innerHeight);
   }, [isOpen]);
-  console.log(innerHeight);
+
   return (
     <motion.div
       animate={{ x: isOpen ? 0 : 500 }}
@@ -124,7 +124,6 @@ function CartItem({ item, cartId }: CartItemProps) {
     });
   };
 
-  console.log({ item });
   return (
     <div className='grid grid-cols-2 gap-x-5 border-b border-gray-200 last:border-b-0 pb-5'>
       <Image src={image} height='150px' width='150px' alt={title} />

@@ -37,8 +37,6 @@ export default function Layout({ children, title }: LayoutProps) {
   }, [cartId, data]);
 
   const cartItems = data?.cart?.lines.edges.length;
-  const reactiveVar = cartItemsVar();
-  console.log({ reactiveVar, data });
 
   return (
     <React.Fragment>

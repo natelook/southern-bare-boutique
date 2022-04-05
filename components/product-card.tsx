@@ -22,13 +22,15 @@ export default function ProductCard({
   return (
     <div className='group relative'>
       <div className='w-full min-h-80 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none'>
-        <Image
-          src={image}
-          alt={altText}
-          width='280px'
-          height='320px'
-          layout='responsive'
-        />
+        {image && (
+          <Image
+            src={image}
+            alt={altText}
+            width='280px'
+            height='320px'
+            layout='responsive'
+          />
+        )}
       </div>
       <div className='mt-1 md:mt-4 flex justify-between'>
         <div>
@@ -38,7 +40,7 @@ export default function ProductCard({
               'text-white': light,
             })}
           >
-            <Link href={href}>
+            <Link href={`/shop/${href}`}>
               <a>
                 <span aria-hidden='true' className='absolute inset-0' />
                 {name}

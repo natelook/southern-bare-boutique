@@ -24,7 +24,7 @@ const product = {
   ],
 };
 
-interface ProductProps {
+export interface ProductProps {
   title: string;
   price: number;
   featuredImage: {
@@ -74,7 +74,7 @@ export default function Product({
 
   const add = async () => {
     const cartId = window.localStorage.getItem('cartId');
-    console.log(cartId);
+
     if (!selectedSize) return;
 
     if (!cartId) {
@@ -84,7 +84,6 @@ export default function Product({
       });
       window.localStorage.setItem('cartId', cartCreation.cartCreate.cart.id);
     } else {
-      console.log('add to existing cart');
       // Add to currently stored cart
       const { data: addedToCart } = await addToCart({
         variables: { itemId: selectedSize, cartId },
@@ -112,7 +111,7 @@ export default function Product({
               <h2 className='sr-only'>Images</h2>
               <div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
                 <div className='lg:col-span-2 lg:row-span-2'>
-                  {featuredImage && (
+                  {featuredImage?.url && (
                     <Image
                       width={featuredImage.width}
                       height={featuredImage.height}
@@ -220,11 +219,11 @@ export default function Product({
                 relatedProducts.products.edges.map(({ node }: any) => (
                   <ProductCard
                     key={node.id}
-                    image={node.featuredImage.url}
+                    image={node.featuredImage?.url}
                     altText={node.imageAlt}
                     name={node.title}
                     price={node.priceRange.minVariantPrice.amount}
-                    href='/shop'
+                    href={node.handle}
                   />
                 ))}
             </div>

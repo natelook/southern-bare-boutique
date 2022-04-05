@@ -30,7 +30,7 @@ export default function Home({ data }: any) {
           </div>
         </div>
         <div className='md:flex justify-center hidden'>
-          <div className='drop-shadow-lg'>
+          <div className='drop-shadow-lg relative z-10'>
             <Image
               src='/dev/image1.png'
               height='545.5'
@@ -49,8 +49,8 @@ export default function Home({ data }: any) {
             {data?.products?.edges.map((product: any, i: number) => (
               <ProductCard
                 key={i}
-                image={product.node.featuredImage.url}
-                href={`/shop/${product.node.handle}`}
+                image={product.node.featuredImage?.url}
+                href={product.node.handle}
                 name={product.node.title}
                 price={product.node.priceRange.minVariantPrice.amount}
                 light
