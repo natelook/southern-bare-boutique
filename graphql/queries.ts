@@ -118,9 +118,7 @@ export const QUERY_CART = gql`
                     }
                   }
                   featuredImage {
-                    url(
-                      transform: { crop: CENTER, maxWidth: 150, maxHeight: 150 }
-                    )
+                    url(transform: { crop: TOP, maxWidth: 150, maxHeight: 150 })
                   }
                 }
               }

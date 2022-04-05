@@ -2,7 +2,6 @@ import { useMutation } from '@apollo/client';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { FiTrash } from 'react-icons/fi';
 import { REMOVE_ITEM_FROM_CART } from '../graphql/queries';
@@ -13,6 +12,7 @@ interface CartProps {
   loading: boolean;
   data: any;
   cartId: string | null;
+  innerHeight: number | null;
 }
 
 export default function Cart({
@@ -21,17 +21,13 @@ export default function Cart({
   loading,
   data,
   cartId,
+  innerHeight,
 }: CartProps) {
-  const [innerHeight, setInnerHeight] = useState<null | number>(null);
-  useEffect(() => {
-    setInnerHeight(window.innerHeight);
-  }, [isOpen]);
-
   return (
     <motion.div
       animate={{ x: isOpen ? 0 : 500 }}
       transition={{ duration: 0.2, bounce: 0 }}
-      className='w-screen md:w-96 fixed right-0 bg-white top-0 py-5 drop-shadow-xl'
+      className='w-screen md:w-96 fixed right-0 bg-white top-0 py-5 drop-shadow-xl z-50'
       style={{ height: `${innerHeight}px` }}
     >
       <div className='overflow-scroll h-full pb-5'>

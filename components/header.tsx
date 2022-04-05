@@ -25,8 +25,8 @@ export default function Header({ openCart, cartItems }: HeaderProps) {
   }, [router.events]);
 
   return (
-    <header className='bg-light drop-shadow-lg text-white'>
-      <div className='relative z-50'>
+    <header className='bg-light drop-shadow-lg text-white relative z-40'>
+      <div className='relative'>
         <div className='container mx-auto flex items-center justify-between py-2 px-2'>
           <div className='-mb-0.5'>
             <Link href='/'>
@@ -79,7 +79,7 @@ export default function Header({ openCart, cartItems }: HeaderProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className='bg-white text-black py-4 w-full absolute left-0 z-50'
+              className='bg-white text-black py-4 w-full absolute left-0 z-40'
             >
               {!loading && Array.isArray(data?.productTypes?.edges) && (
                 <ul className='flex justify-center space-x-5'>

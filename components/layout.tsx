@@ -18,6 +18,11 @@ export default function Layout({ children, title }: LayoutProps) {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartId, setCartId] = useState<string | null>(null);
 
+  const [innerHeight, setInnerHeight] = useState<null | number>(null);
+  useEffect(() => {
+    setInnerHeight(window.innerHeight);
+  }, [cartOpen]);
+
   const { data, loading, refetch } = useQuery(QUERY_CART, {
     variables: {
       cartId: cartIdVar(),
@@ -57,7 +62,10 @@ export default function Layout({ children, title }: LayoutProps) {
     <React.Fragment>
       <Meta title={title} />
       <GoogleAnalytics />
-      <div className={classNames({ 'h-screen overflow-hidden': cartOpen })}>
+      <div
+        className={classNames({ 'overflow-hidden': cartOpen })}
+        style={{ height: `${innerHeight}px` }}
+      >
         <Header openCart={() => setCartOpen(true)} cartItems={cartItems} />
         {children}
         <Footer />
@@ -68,6 +76,7 @@ export default function Layout({ children, title }: LayoutProps) {
         data={data}
         loading={loading}
         cartId={cartId}
+        innerHeight={innerHeight}
       />
     </React.Fragment>
   );

@@ -27,12 +27,13 @@ export default function Home({ data }: any) {
           </div>
         </div>
         <div className='md:flex justify-center hidden'>
-          <div className='drop-shadow-lg relative z-10'>
+          <div className='relative'>
             <Image
               src='/sample.png'
               height='545.5'
               width='363.5'
               alt='Product'
+              priority
             />
           </div>
         </div>
