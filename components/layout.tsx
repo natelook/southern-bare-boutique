@@ -6,6 +6,8 @@ import { QUERY_CART } from '../graphql/queries';
 import { useQuery } from '@apollo/client';
 import Meta from './meta';
 import { cartItemsVar } from '../lib/reactiveVars';
+import Script from 'next/script';
+import GoogleAnalytics from './ga';
 
 interface LayoutProps {
   children: React.ReactChild;
@@ -40,6 +42,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <React.Fragment>
       <Meta />
+      <GoogleAnalytics />
       <Header openCart={() => setCartOpen(true)} cartItems={cartItems} />
       {children}
 
