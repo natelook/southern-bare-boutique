@@ -1,4 +1,3 @@
-import { GetStaticPropsContext } from 'next';
 import Link from 'next/link';
 import PageContainer from '../../components/page-container';
 import { GET_PRODUCT_TYPES } from '../../graphql/queries';
@@ -33,7 +32,7 @@ export default function ProductTypePage({ types }: ProductTypePageProps) {
   );
 }
 
-export async function getStaticProps(context: GetStaticPropsContext) {
+export async function getStaticProps() {
   const { data } = await client.query({
     query: GET_PRODUCT_TYPES,
   });
