@@ -25,48 +25,50 @@ export default function Cart({
   const [innerHeight, setInnerHeight] = useState<null | number>(null);
   useEffect(() => {
     setInnerHeight(window.innerHeight);
-  }, []);
+  }, [isOpen]);
   console.log(innerHeight);
   return (
     <motion.div
       animate={{ x: isOpen ? 0 : 500 }}
       transition={{ duration: 0.2, bounce: 0 }}
-      className='w-screen md:w-96 fixed right-0 bg-white top-0 py-5 drop-shadow-xl border-l'
+      className='w-screen md:w-96 fixed right-0 bg-white top-0 py-5 drop-shadow-xl'
       style={{ height: `${innerHeight}px` }}
     >
-      <div className='flex justify-between border-b border-gray-200 pb-3 px-3'>
-        <h1 className='uppercase font-bold text-2xl'>Cart</h1>
-        <button className='text-3xl block' onClick={close}>
-          <AiOutlineClose />
-        </button>
-      </div>
-      <div className='mt-10 space-y-5 px-5'>
-        {!loading && data && data?.cart?.lines?.edges.length !== 0 ? (
-          data?.cart?.lines?.edges.map(({ node }: any) => (
-            <CartItem
-              key={node.merchandise.id}
-              item={{
-                id: node.id,
-                image: node.merchandise.product.featuredImage.url,
-                title: node.merchandise.product.title,
-                price:
-                  node.merchandise.product.priceRange.maxVariantPrice.amount,
-                quanity: 1,
-                size: node.merchandise.title,
-              }}
-              cartId={cartId}
-            />
-          ))
-        ) : (
-          <p>
-            No items in the cart.{' '}
-            <Link href='/shop'>
-              <a className='text-blue block mt-3' onClick={close}>
-                Shop now!
-              </a>
-            </Link>
-          </p>
-        )}
+      <div className='overflow-scroll h-full pb-5'>
+        <div className='flex justify-between border-b border-gray-200 pb-3 px-3'>
+          <h1 className='uppercase font-bold text-2xl'>Cart</h1>
+          <button className='text-3xl block' onClick={close}>
+            <AiOutlineClose />
+          </button>
+        </div>
+        <div className='mt-10 space-y-5 px-5'>
+          {!loading && data && data?.cart?.lines?.edges.length !== 0 ? (
+            data?.cart?.lines?.edges.map(({ node }: any) => (
+              <CartItem
+                key={node.merchandise.id}
+                item={{
+                  id: node.id,
+                  image: node.merchandise.product.featuredImage.url,
+                  title: node.merchandise.product.title,
+                  price:
+                    node.merchandise.product.priceRange.maxVariantPrice.amount,
+                  quanity: 1,
+                  size: node.merchandise.title,
+                }}
+                cartId={cartId}
+              />
+            ))
+          ) : (
+            <p>
+              No items in the cart.{' '}
+              <Link href='/shop'>
+                <a className='text-blue block mt-3' onClick={close}>
+                  Shop now!
+                </a>
+              </Link>
+            </p>
+          )}
+        </div>
       </div>
       {data?.cart?.lines?.edges.length !== 0 && (
         <div className='absolute bottom-0 w-full'>

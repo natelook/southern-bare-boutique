@@ -8,6 +8,7 @@ import Meta from './meta';
 import { cartItemsVar } from '../lib/reactiveVars';
 import Script from 'next/script';
 import GoogleAnalytics from './ga';
+import classNames from 'classnames';
 
 interface LayoutProps {
   children: React.ReactChild;
@@ -43,9 +44,12 @@ export default function Layout({ children }: LayoutProps) {
     <React.Fragment>
       <Meta />
       <GoogleAnalytics />
-      <Header openCart={() => setCartOpen(true)} cartItems={cartItems} />
-      {children}
+      <div className={classNames({ 'h-screen overflow-hidden': cartOpen })}>
+        <Header openCart={() => setCartOpen(true)} cartItems={cartItems} />
+        {children}
 
+        <Footer />
+      </div>
       <Cart
         isOpen={cartOpen}
         close={() => setCartOpen(false)}
@@ -53,8 +57,6 @@ export default function Layout({ children }: LayoutProps) {
         loading={loading}
         cartId={cartId}
       />
-
-      <Footer />
     </React.Fragment>
   );
 }
