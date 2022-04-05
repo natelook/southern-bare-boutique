@@ -6,15 +6,15 @@ import { QUERY_CART } from '../graphql/queries';
 import { useQuery } from '@apollo/client';
 import Meta from './meta';
 import { cartItemsVar } from '../lib/reactiveVars';
-import Script from 'next/script';
 import GoogleAnalytics from './ga';
 import classNames from 'classnames';
 
 interface LayoutProps {
   children: React.ReactChild;
+  title?: string;
 }
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children, title }: LayoutProps) {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartId, setCartId] = useState<string | null>(null);
 
@@ -42,12 +42,11 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <React.Fragment>
-      <Meta />
+      <Meta title={title} />
       <GoogleAnalytics />
       <div className={classNames({ 'h-screen overflow-hidden': cartOpen })}>
         <Header openCart={() => setCartOpen(true)} cartItems={cartItems} />
         {children}
-
         <Footer />
       </div>
       <Cart

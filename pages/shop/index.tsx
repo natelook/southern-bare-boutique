@@ -24,6 +24,8 @@ interface Props {
   products: ProductProps;
 }
 
+ShopPage.title = 'Shop';
+
 export default function ShopPage({ products }: Props) {
   console.log({ products });
   return (

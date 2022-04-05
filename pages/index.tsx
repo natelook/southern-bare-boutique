@@ -5,6 +5,8 @@ import ProductCard from '../components/product-card';
 import { PRODUCTS } from '../graphql/queries';
 import client from '../lib/apollo';
 
+Home.title = 'Home';
+
 export default function Home({ data }: any) {
   // const { data } = useQuery(PRODUCTS, {
   //   variables: { list: 12, featuredHeight: 640, featuredWidth: 560 },

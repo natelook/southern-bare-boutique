@@ -3,6 +3,8 @@ import Product from '../../components/product';
 import { GET_PRODUCT_PATHS, GET_SINGLE_PRODUCT } from '../../graphql/queries';
 import client from '../../lib/apollo';
 
+ProductPage.title = 'Shop';
+
 export default function ProductPage({ product }: any) {
   return (
     <Product
