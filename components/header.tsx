@@ -32,7 +32,7 @@ export default function Header({ openCart, cartItems }: HeaderProps) {
           <li className='block h-6 w-6 relative' onClick={openCart}>
             <ShoppingBagIcon />
             {cartItems !== null && cartItems > 0 && (
-              <span className='absolute bg-blue h-5 w-5 flex items-center justify-center rounded-full -top-2 -right-3 text-xs'>
+              <span className='absolute -top-1 -right-1 bg-blue w-4 h-4 md:h-5 md:w-5 flex items-center justify-center rounded-full md:-top-2 md:-right-3 text-xs'>
                 {cartItems}
               </span>
             )}

@@ -3,10 +3,17 @@ import { RadioGroup } from '@headlessui/react';
 import { CurrencyDollarIcon, GlobeIcon } from '@heroicons/react/outline';
 import Image from 'next/image';
 import classNames from '../lib/classNames';
-import { ADD_TO_CART, CREATE_CART, PRODUCTS } from '../graphql/queries';
+import {
+  ADD_TO_CART,
+  CREATE_CART,
+  PRODUCTS,
+  QUERY_CART,
+} from '../graphql/queries';
 import { useMutation, useQuery } from '@apollo/client';
 import ProductCard from './product-card';
 import { AnimatePresence, motion } from 'framer-motion';
+import { cartItemsVar } from '../lib/reactiveVars';
+import client from '../lib/apollo';
 
 const product = {
   details: [
@@ -62,19 +69,23 @@ export default function Product({
 
   const [createCart] = useMutation(CREATE_CART);
   const [addToCart] = useMutation(ADD_TO_CART, {
-    refetchQueries: 'all',
+    refetchQueries: [QUERY_CART],
   });
 
   const add = async () => {
     const cartId = window.localStorage.getItem('cartId');
+    console.log(cartId);
     if (!selectedSize) return;
 
     if (!cartId) {
+      // Create new cart
       const { data: cartCreation } = await createCart({
         variables: { itemId: selectedSize },
       });
       window.localStorage.setItem('cartId', cartCreation.cartCreate.cart.id);
     } else {
+      console.log('add to existing cart');
+      // Add to currently stored cart
       const { data: addedToCart } = await addToCart({
         variables: { itemId: selectedSize, cartId },
       });
@@ -107,6 +118,7 @@ export default function Product({
                       height={featuredImage.height}
                       src={featuredImage.url}
                       alt={featuredImage.altText}
+                      priority
                     />
                   )}
                 </div>
@@ -124,7 +136,7 @@ export default function Product({
                     <RadioGroup.Label className='sr-only'>
                       Choose a size
                     </RadioGroup.Label>
-                    <div className='grid grid-cols-3 gap-3 sm:grid-cols-5'>
+                    <div className='flex gap-3 sm:grid-cols-5'>
                       {sizes &&
                         sizes.map(({ node }) => (
                           <RadioGroup.Option

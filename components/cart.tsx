@@ -22,11 +22,17 @@ export default function Cart({
   data,
   cartId,
 }: CartProps) {
+  const [innerHeight, setInnerHeight] = useState<null | number>(null);
+  useEffect(() => {
+    setInnerHeight(window.innerHeight);
+  }, []);
+  console.log(innerHeight);
   return (
     <motion.div
       animate={{ x: isOpen ? 0 : 500 }}
       transition={{ duration: 0.2, bounce: 0 }}
-      className='w-screen md:w-96 h-screen fixed right-0 bg-white top-0 py-5 drop-shadow-xl border-l'
+      className='w-screen md:w-96 fixed right-0 bg-white top-0 py-5 drop-shadow-xl border-l'
+      style={{ height: `${innerHeight}px` }}
     >
       <div className='flex justify-between border-b border-gray-200 pb-3 px-3'>
         <h1 className='uppercase font-bold text-2xl'>Cart</h1>
@@ -35,8 +41,8 @@ export default function Cart({
         </button>
       </div>
       <div className='mt-10 space-y-5 px-5'>
-        {!loading && data?.cart.lines?.edges.length !== 0 ? (
-          data?.cart.lines?.edges.map(({ node }: any) => (
+        {!loading && data && data?.cart?.lines?.edges.length !== 0 ? (
+          data?.cart?.lines?.edges.map(({ node }: any) => (
             <CartItem
               key={node.merchandise.id}
               item={{
@@ -62,7 +68,7 @@ export default function Cart({
           </p>
         )}
       </div>
-      {data?.cart.lines?.edges.length !== 0 && (
+      {data?.cart?.lines?.edges.length !== 0 && (
         <div className='absolute bottom-0 w-full'>
           <a
             className='bg-blue text-white w-full py-4 uppercase tracking-wider block text-center'
