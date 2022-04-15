@@ -43,6 +43,7 @@ export interface ProductProps {
   }[];
   description?: string;
   id: string;
+  tags?: string[];
 }
 
 export default function Product({
@@ -51,9 +52,13 @@ export default function Product({
   featuredImage,
   sizes,
   description,
+  tags,
 }: ProductProps) {
   const [selectedSize, setSelectedSize] = useState(null);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [preorderItem, setPreorderItem] = useState(false);
+
+  console.log({ sizes });
 
   useEffect(() => {
     if (addedToCart) {
@@ -62,6 +67,13 @@ export default function Product({
       }, 5000);
     }
   }, [addedToCart]);
+
+  useEffect(() => {
+    if (tags) {
+      const findPreorder = tags.find((tag) => tag.toLowerCase() === 'preorder');
+      findPreorder && setPreorderItem(true);
+    }
+  }, [tags]);
 
   const { data: relatedProducts, loading } = useQuery(PRODUCTS, {
     variables: { list: 4, featuredHeight: 640, featuredWidth: 560 },
@@ -170,7 +182,11 @@ export default function Product({
                   onClick={add}
                   className='mt-8 w-full bg-blue border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white'
                 >
-                  {!addedToCart ? 'Add to cart' : 'Added To Cart!'}
+                  {!addedToCart
+                    ? !preorderItem
+                      ? 'Add to cart'
+                      : 'Preorder'
+                    : 'Added To Cart!'}
                 </button>
               </form>
 

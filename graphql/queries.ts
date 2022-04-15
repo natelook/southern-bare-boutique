@@ -37,6 +37,7 @@ export const GET_SINGLE_PRODUCT = gql`
     product(handle: $handle) {
       id
       title
+      tags
       featuredImage {
         url
         height

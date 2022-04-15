@@ -13,6 +13,7 @@ export default function ProductPage({ product }: any) {
       featuredImage={product?.featuredImage}
       sizes={product?.variants?.edges}
       description={product?.descriptionHtml}
+      tags={product?.tags}
       id={product?.id}
     />
   );
