@@ -9,7 +9,7 @@ interface AboutPageProps {
 export default function AboutPage({ collections }: AboutPageProps) {
   return (
     <Layout title='About' collections={collections}>
-      <div className='container max-w-xl mx-auto py-20'>
+      <div className='container max-w-xl mx-auto py-20 px-5'>
         <h1 className='text-6xl mb-10 font-sacramento'>About Us</h1>
         <p className='text-lg'>
           Small family business ran by the girls in the family. Our goal is to

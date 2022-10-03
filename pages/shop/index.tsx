@@ -1,31 +1,31 @@
-import PageContainer from '../../components/page-container';
-import ProductCard from '../../components/product-card';
-import { PRODUCTS } from '../../graphql/queries';
-import client from '../../lib/apollo';
+import PageContainer from '../../components/page-container'
+import ProductCard from '../../components/product-card'
+import { PRODUCTS } from '../../graphql/queries'
+import client from '../../lib/apollo'
 
 interface ProductProps {
   edges: {
     node: {
-      id: string;
-      title: string;
-      handle: string;
+      id: string
+      title: string
+      handle: string
       priceRange: {
         minVariantPrice: {
-          amount: number;
-        };
-      };
+          amount: number
+        }
+      }
       featuredImage: {
-        url: string;
-      };
-    };
-  }[];
+        url: string
+      }
+    }
+  }[]
 }
 
 interface Props {
-  products: ProductProps;
+  products: ProductProps
 }
 
-ShopPage.title = 'Shop';
+ShopPage.title = 'Shop'
 
 export default function ShopPage({ products }: Props) {
   return (
@@ -45,14 +45,14 @@ export default function ShopPage({ products }: Props) {
         </div>
       </div>
     </PageContainer>
-  );
+  )
 }
 
 export async function getStaticProps() {
   const { data } = await client.query({
     query: PRODUCTS,
     variables: { list: 5, featuredHeight: 320, featuredWidth: 260 },
-  });
-  const products = data.products;
-  return { props: { products } };
+  })
+  const products = data.products
+  return { props: { products }, revalidate: 20 }
 }

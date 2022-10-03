@@ -34,7 +34,7 @@ export default function Header({
     router.events.on('routeChangeStart', () => setCategoriesOpen(false))
   }, [router.events])
   return (
-    <header className='bg-white border'>
+    <header className='bg-white border select-none'>
       <div className='flex justify-center items-center pt-4 pb-2'>
         <div>
           <div className='flex justify-center mb-3'>
@@ -50,7 +50,7 @@ export default function Header({
             </Link>
           </div>
           <nav>
-            <ul className='flex space-x-20'>
+            <ul className='flex justify-center md:space-x-20 space-x-5 '>
               <li>
                 <Link href='/'>
                   <a>Home</a>
