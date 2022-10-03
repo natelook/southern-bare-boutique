@@ -32,7 +32,7 @@ export async function getStaticPaths() {
     }),
   )
 
-  return { paths: products, fallback: true, reva }
+  return { paths: products, fallback: true }
 }
 
 export async function getStaticProps(context: GetStaticPropsContext) {

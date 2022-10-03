@@ -38,12 +38,16 @@ export default function Header({
       <div className='flex justify-center items-center pt-4 pb-2'>
         <div>
           <div className='flex justify-center mb-3'>
-            <Image
-              src='/logo-black.svg'
-              height='42.5px'
-              width='300px'
-              alt='Southen Bare Boutique Logo'
-            />
+            <Link href='/'>
+              <a>
+                <Image
+                  src='/logo-black.svg'
+                  height='42.5px'
+                  width='300px'
+                  alt='Southen Bare Boutique Logo'
+                />
+              </a>
+            </Link>
           </div>
           <nav>
             <ul className='flex space-x-20'>
