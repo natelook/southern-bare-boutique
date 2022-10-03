@@ -1,40 +1,40 @@
 import Link from 'next/link'
+import Layout from '../../components/layout'
 import PageContainer from '../../components/page-container'
 import { GET_PRODUCT_TYPES } from '../../graphql/queries'
 import client from '../../lib/apollo'
-
-export interface ProductTypeNodeAndCursor {
-  node: string
-  cursor: string
-}
+import { getCollections } from '../../lib/collections'
+import { Collections } from '../../lib/types'
 
 interface ProductTypePageProps {
-  types: {
-    edges: ProductTypeNodeAndCursor[]
-  }
+  collections: Collections[]
 }
 
-export default function ProductTypePage({ types }: ProductTypePageProps) {
+export default function ProductTypePage({ collections }: ProductTypePageProps) {
   return (
-    <PageContainer>
-      <h1 className='text-2xl font-bold text-gray-900'>Products</h1>
-      <ul className='text-black'>
-        {types.edges.map(({ node, cursor }) => (
-          <li key={cursor}>
-            <Link href={`/categories/${cursor}`}>
-              <a>{node}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </PageContainer>
+    <Layout title='Categories' collections={collections}>
+      <PageContainer>
+        <div className='text-center'>
+          <h1 className='text-5xl font-bold text-gray-900 font-sacramento mb-5'>
+            Categories
+          </h1>
+          <ul className='text-black text-xl space-y-5'>
+            {collections.map(({ node }) => (
+              <li key={node.id}>
+                <Link href={`/categories/${node.handle}`}>
+                  <a>{node.title}</a>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </PageContainer>
+    </Layout>
   )
 }
 
 export async function getStaticProps() {
-  const { data } = await client.query({
-    query: GET_PRODUCT_TYPES,
-  })
+  const collections = await getCollections()
 
-  return { props: { types: data.productTypes }, revalidate: 20 }
+  return { props: { collections }, revalidate: 20 }
 }

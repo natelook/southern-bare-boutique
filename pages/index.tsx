@@ -24,7 +24,7 @@ export default function Home({ data, featured, collections }: any) {
                   Shop new items
                 </h3>
               </div>
-              <Link href='/categories'>
+              <Link href='/shop'>
                 <a className='bg-blue bg-opacity-80 text-xl text-white px-5 py-2 rounded-lg mx-auto hover:bg-opacity-100 duration-100'>
                   Shop Now
                 </a>
