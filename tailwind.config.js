@@ -15,9 +15,16 @@ module.exports = {
       colors: {
         dark: '#161616',
         light: '#9A918D',
-        blue: '#74a0b3',
+        lighter: '#EFE1DB',
+        blue: {
+          DEFAULT: '#74a0b3',
+          dark: '#3B6F85',
+        },
+      },
+      backgroundImage: {
+        'header-image': "url('/woman-shopping.jpg')",
       },
     },
   },
   plugins: [],
-};
+}

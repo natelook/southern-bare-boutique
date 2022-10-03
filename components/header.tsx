@@ -1,103 +1,105 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { ShoppingBagIcon } from '@heroicons/react/outline';
-import { BsChevronDown } from 'react-icons/bs';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useQuery } from '@apollo/client';
-import { GET_PRODUCT_TYPES } from '../graphql/queries';
-import { ProductTypeNodeAndCursor } from '../pages/categories';
-import { useEffect, useState } from 'react';
-import classNames from 'classnames';
-import { useRouter } from 'next/router';
+import { ShoppingBagIcon } from '@heroicons/react/outline'
+import { AnimatePresence, motion } from 'framer-motion'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { BsChevronDown } from 'react-icons/bs'
+import { Collections } from '../lib/types'
+
+const fakeCategories = [
+  { name: 'Basics', slug: '/basics' },
+  { name: 'Tops', slug: '/tops' },
+  { name: 'Dresses', slug: '/dresses' },
+  { name: 'Sweaters', slug: '/sweaters' },
+  { name: 'Bottoms', slug: '/bottoms' },
+  { name: 'Denim', slug: '/denim' },
+  { name: 'Sets', slug: '/sets' },
+]
 
 interface HeaderProps {
-  openCart: () => void;
-  cartItems: number | null;
+  cartItems: number
+  openCart: () => void
+  collections: Collections[]
 }
 
-export default function Header({ openCart, cartItems }: HeaderProps) {
-  const [isCategoriesOpen, setCategoriesOpen] = useState(false);
-  const { data, loading } = useQuery(GET_PRODUCT_TYPES);
-  const router = useRouter();
-
+export default function Header({
+  cartItems,
+  openCart,
+  collections,
+}: HeaderProps) {
+  const [isCategoriesOpen, setCategoriesOpen] = useState(false)
+  const router = useRouter()
   useEffect(() => {
-    router.events.on('routeChangeStart', () => setCategoriesOpen(false));
-  }, [router.events]);
-
+    router.events.on('routeChangeStart', () => setCategoriesOpen(false))
+  }, [router.events])
   return (
-    <header className='bg-light drop-shadow-lg text-white relative z-40'>
-      <div className='relative'>
-        <div className='container mx-auto flex items-center justify-between py-2 px-2'>
-          <div className='-mb-0.5'>
-            <Link href='/'>
-              <a>
-                <Image
-                  src='/logo.svg'
-                  height='39px'
-                  width='195px'
-                  alt='Southern Bare Boutique Logo'
-                />
-              </a>
-            </Link>
+    <header className='bg-white border'>
+      <div className='flex justify-center items-center pt-4 pb-2'>
+        <div>
+          <div className='flex justify-center mb-3'>
+            <Image
+              src='/logo-black.svg'
+              height='42.5px'
+              width='300px'
+              alt='Southen Bare Boutique Logo'
+            />
           </div>
-          <ul className='flex items-center space-x-1 md:space-x-4 text-sm md:text-base'>
-            <li className='flex flex-col-reverse md:flex-row space-x-5'>
-              <div className='font-bold uppercase'>
-                <span
-                  className='flex items-center md:space-x-1'
-                  onClick={() => setCategoriesOpen(!isCategoriesOpen)}
-                >
-                  <span>Categories</span>{' '}
-                  <span
-                    className={classNames('transition', {
-                      'rotate-180': isCategoriesOpen,
-                    })}
-                  >
-                    <BsChevronDown />
-                  </span>
-                </span>
-              </div>
-              <div className='font-bold uppercase'>
-                <Link href='/shop'>
-                  <a>Shop</a>
+          <nav>
+            <ul className='flex space-x-20'>
+              <li>
+                <Link href='/'>
+                  <a>Home</a>
                 </Link>
-              </div>
-            </li>
-            <li className='block h-6 w-6 relative' onClick={openCart}>
-              <ShoppingBagIcon />
-              {cartItems !== null && cartItems > 0 && (
-                <span className='absolute -top-1 -right-1 bg-blue w-4 h-4 md:h-5 md:w-5 flex items-center justify-center rounded-full md:-top-2 md:-right-3 text-xs'>
-                  {cartItems}
-                </span>
-              )}
-            </li>
-          </ul>
-        </div>
-        <AnimatePresence>
-          {isCategoriesOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className='bg-white text-black py-4 w-full absolute left-0 z-40'
-            >
-              {!loading && Array.isArray(data?.productTypes?.edges) && (
-                <ul className='flex justify-center space-x-5'>
-                  {data.productTypes.edges.map(
-                    (edge: ProductTypeNodeAndCursor) => (
-                      <li key={edge.cursor}>
-                        <Link href={`/categories/${edge.cursor}`}>
-                          <a className='font-bold'>{edge.node}</a>
-                        </Link>
-                      </li>
-                    )
+              </li>
+              <li>
+                <Link href='/about'>
+                  <a>About</a>
+                </Link>
+              </li>
+              <li
+                className='flex space-x-1 items-center cursor-pointer relative'
+                onClick={() =>
+                  setCategoriesOpen(isCategoriesOpen ? false : true)
+                }
+              >
+                <span>Shop</span>
+                <BsChevronDown size='.75em' />
+                <AnimatePresence>
+                  {isCategoriesOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className='absolute top-8 -left-8 bg-white border px-8 pb-5 pt-4 border-gray-200 z-30 space-y-3'
+                    >
+                      {collections.map(({ node }) => (
+                        <li key={node.handle}>
+                          <Link href={`/categories/${node.handle}`}>
+                            <a>{node.title}</a>
+                          </Link>
+                        </li>
+                      ))}
+                    </motion.div>
                   )}
-                </ul>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+                </AnimatePresence>
+              </li>
+              <li
+                className='block h-6 w-6 relative text-gray-600'
+                onClick={openCart}
+              >
+                <ShoppingBagIcon />
+                {cartItems !== null && cartItems > 0 && (
+                  <span className='text-white absolute -top-1 -right-2 bg-blue w-4 h-4 md:h-5 md:w-5 flex items-center justify-center rounded-full md:-top-2 md:-right-2 text-xs'>
+                    {cartItems}
+                  </span>
+                )}
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </header>
-  );
+  )
 }

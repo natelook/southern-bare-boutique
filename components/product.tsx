@@ -1,19 +1,19 @@
-import { Fragment, useEffect, useState } from 'react';
-import { RadioGroup } from '@headlessui/react';
-import { CurrencyDollarIcon, GlobeIcon } from '@heroicons/react/outline';
-import Image from 'next/image';
-import classNames from '../lib/classNames';
+import { Fragment, useEffect, useState } from 'react'
+import { RadioGroup } from '@headlessui/react'
+import { CurrencyDollarIcon, GlobeIcon } from '@heroicons/react/outline'
+import Image from 'next/image'
+import classNames from '../lib/classNames'
 import {
   ADD_TO_CART,
   CREATE_CART,
   PRODUCTS,
   QUERY_CART,
-} from '../graphql/queries';
-import { useMutation, useQuery } from '@apollo/client';
-import ProductCard from './product-card';
-import { AnimatePresence, motion } from 'framer-motion';
-import { cartIdVar } from '../lib/reactiveVars';
-import client from '../lib/apollo';
+} from '../graphql/queries'
+import { useMutation, useQuery } from '@apollo/client'
+import ProductCard from './product-card'
+import { AnimatePresence, motion } from 'framer-motion'
+import { cartIdVar } from '../lib/reactiveVars'
+import client from '../lib/apollo'
 
 const product = {
   details: [
@@ -22,28 +22,28 @@ const product = {
     'Pre-washed and pre-shrunk',
     'Machine wash cold with similar colors',
   ],
-};
+}
 
 export interface ProductProps {
-  title: string;
-  price: number;
+  title: string
+  price: number
   featuredImage: {
-    id: string;
-    url: string;
-    height: number;
-    width: number;
-    altText?: string;
-  };
+    id: string
+    url: string
+    height: number
+    width: number
+    altText?: string
+  }
   sizes: {
     node: {
-      id: string;
-      title: string;
-      currentlyNotInStock: boolean;
-    };
-  }[];
-  description?: string;
-  id: string;
-  tags?: string[];
+      id: string
+      title: string
+      currentlyNotInStock: boolean
+    }
+  }[]
+  description?: string
+  id: string
+  tags?: string[]
 }
 
 export default function Product({
@@ -54,56 +54,54 @@ export default function Product({
   description,
   tags,
 }: ProductProps) {
-  const [selectedSize, setSelectedSize] = useState(null);
-  const [addedToCart, setAddedToCart] = useState(false);
-  const [preorderItem, setPreorderItem] = useState(false);
-
-  console.log({ sizes });
+  const [selectedSize, setSelectedSize] = useState(null)
+  const [addedToCart, setAddedToCart] = useState(false)
+  const [preorderItem, setPreorderItem] = useState(false)
 
   useEffect(() => {
     if (addedToCart) {
       setTimeout(() => {
-        setAddedToCart(false);
-      }, 5000);
+        setAddedToCart(false)
+      }, 5000)
     }
-  }, [addedToCart]);
+  }, [addedToCart])
 
   useEffect(() => {
     if (tags) {
-      const findPreorder = tags.find((tag) => tag.toLowerCase() === 'preorder');
-      findPreorder && setPreorderItem(true);
+      const findPreorder = tags.find((tag) => tag.toLowerCase() === 'preorder')
+      findPreorder && setPreorderItem(true)
     }
-  }, [tags]);
+  }, [tags])
 
   const { data: relatedProducts, loading } = useQuery(PRODUCTS, {
     variables: { list: 4, featuredHeight: 640, featuredWidth: 560 },
-  });
+  })
 
-  const [createCart] = useMutation(CREATE_CART);
+  const [createCart] = useMutation(CREATE_CART)
   const [addToCart] = useMutation(ADD_TO_CART, {
     refetchQueries: [QUERY_CART],
-  });
+  })
 
   const add = async () => {
-    const cartId = window.localStorage.getItem('cartId');
+    const cartId = window.localStorage.getItem('cartId')
 
-    if (!selectedSize) return;
+    if (!selectedSize) return
 
     if (!cartId) {
       // Create new cart
       const { data: cartCreation } = await createCart({
         variables: { itemId: selectedSize },
-      });
-      cartIdVar(cartCreation.cartCreate.cart.id);
-      window.localStorage.setItem('cartId', cartCreation.cartCreate.cart.id);
+      })
+      cartIdVar(cartCreation.cartCreate.cart.id)
+      window.localStorage.setItem('cartId', cartCreation.cartCreate.cart.id)
     } else {
       // Add to currently stored cart
       const { data: addedToCart } = await addToCart({
         variables: { itemId: selectedSize, cartId },
-      });
+      })
     }
-    setAddedToCart(true);
-  };
+    setAddedToCart(true)
+  }
 
   return (
     <Fragment>
@@ -163,7 +161,7 @@ export default function Product({
                                 checked
                                   ? 'bg-blue border-transparent text-white hover:bg-blue'
                                   : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
-                                'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1 w-full'
+                                'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1 w-full',
                               )
                             }
                             disabled={node.currentlyNotInStock}
@@ -248,5 +246,5 @@ export default function Product({
         </main>
       </div>
     </Fragment>
-  );
+  )
 }

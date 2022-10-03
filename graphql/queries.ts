@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const PRODUCTS = gql`
   query PRODUCTS(
@@ -30,7 +30,7 @@ export const PRODUCTS = gql`
       }
     }
   }
-`;
+`
 
 export const GET_SINGLE_PRODUCT = gql`
   query getProduct($handle: String!) {
@@ -76,7 +76,7 @@ export const GET_SINGLE_PRODUCT = gql`
       descriptionHtml
     }
   }
-`;
+`
 
 export const GET_PRODUCT_PATHS = gql`
   query getProductPaths {
@@ -88,7 +88,7 @@ export const GET_PRODUCT_PATHS = gql`
       }
     }
   }
-`;
+`
 
 export const GET_RELATED_PRODUCTS = gql`
   query getRelatedProducts($id: ID!) {
@@ -97,7 +97,7 @@ export const GET_RELATED_PRODUCTS = gql`
       id
     }
   }
-`;
+`
 
 export const QUERY_CART = gql`
   query getCart($cartId: ID!) {
@@ -111,15 +111,21 @@ export const QUERY_CART = gql`
               ... on ProductVariant {
                 id
                 title
+                priceV2 {
+                  amount
+                }
                 product {
+                  availableForSale
                   title
+                  handle
                   priceRange {
                     maxVariantPrice {
                       amount
                     }
                   }
                   featuredImage {
-                    url(transform: { crop: TOP, maxWidth: 150, maxHeight: 150 })
+                    url(transform: { crop: TOP, maxWidth: 500, maxHeight: 500 })
+                    altText
                   }
                 }
               }
@@ -129,7 +135,7 @@ export const QUERY_CART = gql`
       }
     }
   }
-`;
+`
 
 export const CREATE_CART = gql`
   mutation ($itemId: ID!) {
@@ -170,7 +176,7 @@ export const CREATE_CART = gql`
       }
     }
   }
-`;
+`
 
 export const ADD_TO_CART = gql`
   mutation ($cartId: ID!, $itemId: ID!) {
@@ -213,7 +219,7 @@ export const ADD_TO_CART = gql`
       }
     }
   }
-`;
+`
 
 export const REMOVE_ITEM_FROM_CART = gql`
   mutation cartItemsRemove($cartId: ID!, $itemsId: [ID!]!) {
@@ -223,7 +229,7 @@ export const REMOVE_ITEM_FROM_CART = gql`
       }
     }
   }
-`;
+`
 
 export const GET_PRODUCT_TYPES = gql`
   {
@@ -234,7 +240,7 @@ export const GET_PRODUCT_TYPES = gql`
       }
     }
   }
-`;
+`
 
 export const QUERY_BY_PRODUCT_TYPE = gql`
   query queryByProductType($query: String!) {
@@ -256,7 +262,7 @@ export const QUERY_BY_PRODUCT_TYPE = gql`
       }
     }
   }
-`;
+`
 
 export const QUERY_FEATURED_COLLECTION = gql`
   {
@@ -280,4 +286,44 @@ export const QUERY_FEATURED_COLLECTION = gql`
       }
     }
   }
-`;
+`
+
+export const COLLECTIONS = gql`
+  query getCollections {
+    collections(first: 20) {
+      edges {
+        node {
+          id
+          handle
+          title
+        }
+      }
+    }
+  }
+`
+
+export const GET_COLLECTION = gql`
+  query getCollection($handle: String!) {
+    collection(handle: $handle) {
+      title
+      handle
+      products(first: 20) {
+        edges {
+          node {
+            handle
+            title
+            featuredImage {
+              url(transform: { maxWidth: 560, maxHeight: 640, crop: CENTER })
+            }
+            id
+            priceRange {
+              minVariantPrice {
+                amount
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`

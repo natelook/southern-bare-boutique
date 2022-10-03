@@ -1,47 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import Header from './header';
-import Footer from './footer';
-import Cart from './cart';
-import { QUERY_CART } from '../graphql/queries';
-import { useQuery } from '@apollo/client';
-import Meta from './meta';
-import { cartIdVar } from '../lib/reactiveVars';
-import GoogleAnalytics from './ga';
-import classNames from 'classnames';
+import React, { useEffect, useState } from 'react'
+import Header from './header'
+import Footer from './footer'
+import Cart from './cart'
+import { QUERY_CART } from '../graphql/queries'
+import { useQuery } from '@apollo/client'
+import Meta from './meta'
+import { cartIdVar } from '../lib/reactiveVars'
+import GoogleAnalytics from './ga'
+import classNames from 'classnames'
+import { Collections } from '../lib/types'
 
 interface LayoutProps {
-  children: React.ReactChild;
-  title?: string;
+  children: React.ReactChild
+  title?: string
+  collections: Collections[]
 }
 
-export default function Layout({ children, title }: LayoutProps) {
-  const [cartOpen, setCartOpen] = useState(false);
-  const [cartId, setCartId] = useState<string | null>(null);
+export default function Layout({ children, title, collections }: LayoutProps) {
+  const [cartOpen, setCartOpen] = useState(false)
+  const [cartId, setCartId] = useState<string | null>(null)
 
-  const [innerHeight, setInnerHeight] = useState<null | number>(null);
+  const [innerHeight, setInnerHeight] = useState<null | number>(null)
   useEffect(() => {
-    setInnerHeight(window.innerHeight);
-  }, [cartOpen]);
+    setInnerHeight(window.innerHeight)
+  }, [cartOpen])
 
   const { data, loading, refetch } = useQuery(QUERY_CART, {
     variables: {
       cartId: cartIdVar(),
     },
-  });
+  })
 
   useEffect(() => {
     if (window.localStorage.getItem('cartId')) {
-      setCartId(window.localStorage.getItem('cartId'));
-      cartIdVar(window.localStorage.getItem('cartId'));
+      setCartId(window.localStorage.getItem('cartId'))
+      cartIdVar(window.localStorage.getItem('cartId'))
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
     if (cartIdVar()) {
-      console.log('fired', cartIdVar());
-      refetch();
+      refetch()
     }
-  }, [refetch]);
+  }, [refetch])
 
   // useEffect(() => {
   //   function getCartId() {
@@ -56,7 +57,7 @@ export default function Layout({ children, title }: LayoutProps) {
   //   return () => window.removeEventListener('storage', getCartId);
   // }, [refetch]);
 
-  const cartItems = data?.cart?.lines.edges.length;
+  const cartItems = data?.cart?.lines.edges.length
 
   return (
     <React.Fragment>
@@ -66,8 +67,12 @@ export default function Layout({ children, title }: LayoutProps) {
         className={classNames({ 'overflow-hidden': cartOpen })}
         style={{ height: `${innerHeight}px` }}
       >
-        <Header openCart={() => setCartOpen(true)} cartItems={cartItems} />
-        {children}
+        <Header
+          openCart={() => setCartOpen(true)}
+          cartItems={cartItems}
+          collections={collections}
+        />
+        <div className='bg-white'>{children}</div>
         <Footer />
       </div>
       <Cart
@@ -79,5 +84,5 @@ export default function Layout({ children, title }: LayoutProps) {
         innerHeight={innerHeight}
       />
     </React.Fragment>
-  );
+  )
 }
