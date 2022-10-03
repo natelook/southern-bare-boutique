@@ -1,13 +1,8 @@
 import { GetStaticPropsContext } from 'next'
-import { ProductTypeNodeAndCursor } from '.'
 import Layout from '../../components/layout'
 import PageContainer from '../../components/page-container'
 import ProductCard from '../../components/product-card'
-import {
-  GET_COLLECTION,
-  GET_PRODUCT_TYPES,
-  QUERY_BY_PRODUCT_TYPE,
-} from '../../graphql/queries'
+import { GET_COLLECTION } from '../../graphql/queries'
 import client from '../../lib/apollo'
 import { getCollections } from '../../lib/collections'
 import { Collections, ProductProps } from '../../lib/types'
