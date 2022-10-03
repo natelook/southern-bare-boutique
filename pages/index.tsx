@@ -73,5 +73,5 @@ export async function getStaticProps() {
   const { data: featured } = await client.query({
     query: QUERY_FEATURED_COLLECTION,
   })
-  return { props: { data, featured, collections } }
+  return { props: { data, featured, collections }, revalidate: 20 }
 }

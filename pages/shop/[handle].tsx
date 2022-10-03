@@ -32,7 +32,7 @@ export async function getStaticPaths() {
     }),
   )
 
-  return { paths: products, fallback: true }
+  return { paths: products, fallback: true, reva }
 }
 
 export async function getStaticProps(context: GetStaticPropsContext) {
@@ -42,5 +42,5 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     variables: { handle: context?.params?.handle },
   })
 
-  return { props: { product: data.product, collections } }
+  return { props: { product: data.product, collections }, revalidate: 20 }
 }

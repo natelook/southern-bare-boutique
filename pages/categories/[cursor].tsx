@@ -68,5 +68,6 @@ export async function getStaticProps({ params }: GetStaticPropsContext) {
       name: data.collection.title,
       collections,
     },
+    revalidate: 20,
   }
 }

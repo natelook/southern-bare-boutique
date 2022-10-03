@@ -22,5 +22,5 @@ export default function AboutPage({ collections }: AboutPageProps) {
 
 export async function getStaticProps() {
   const collections = await getCollections()
-  return { props: { collections } }
+  return { props: { collections }, revalidate: 20 }
 }

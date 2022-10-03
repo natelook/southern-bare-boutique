@@ -36,5 +36,5 @@ export async function getStaticProps() {
     query: GET_PRODUCT_TYPES,
   })
 
-  return { props: { types: data.productTypes } }
+  return { props: { types: data.productTypes }, revalidate: 20 }
 }
