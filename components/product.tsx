@@ -202,20 +202,6 @@ export default function Product({
                 />
               </div>
 
-              <div className='mt-8 border-t border-gray-200 pt-8'>
-                <h2 className='text-sm font-medium text-gray-900'>
-                  Fabric &amp; Care
-                </h2>
-
-                <div className='mt-4 prose prose-sm text-gray-500'>
-                  <ul role='list'>
-                    {product.details.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
               {/* Policies */}
             </div>
           </div>
