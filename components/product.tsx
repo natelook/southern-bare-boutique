@@ -1,7 +1,5 @@
 import { Fragment, useEffect, useState } from 'react'
-import { RadioGroup } from '@headlessui/react'
-import { CurrencyDollarIcon, GlobeIcon } from '@heroicons/react/outline'
-import Image from 'next/image'
+import { RadioGroup, Tab } from '@headlessui/react'
 import classNames from '../lib/classNames'
 import {
   ADD_TO_CART,
@@ -11,18 +9,9 @@ import {
 } from '../graphql/queries'
 import { useMutation, useQuery } from '@apollo/client'
 import ProductCard from './product-card'
-import { AnimatePresence, motion } from 'framer-motion'
 import { cartIdVar } from '../lib/reactiveVars'
-import client from '../lib/apollo'
 
-const product = {
-  details: [
-    'Only the best materials',
-    'Ethically and locally made',
-    'Pre-washed and pre-shrunk',
-    'Machine wash cold with similar colors',
-  ],
-}
+/* eslint-disable @next/next/no-img-element */
 
 export interface ProductProps {
   title: string
@@ -34,6 +23,13 @@ export interface ProductProps {
     width: number
     altText?: string
   }
+  images?: {
+    node: {
+      url: string
+      id: string
+      alt: string
+    }
+  }[]
   sizes: {
     node: {
       id: string
@@ -50,6 +46,7 @@ export default function Product({
   title,
   price,
   featuredImage,
+  images,
   sizes,
   description,
   tags,
@@ -122,15 +119,52 @@ export default function Product({
               <h2 className='sr-only'>Images</h2>
               <div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-8'>
                 <div className='lg:col-span-2 lg:row-span-2'>
-                  {featuredImage?.url && (
-                    <Image
-                      width={featuredImage.width}
-                      height={featuredImage.height}
-                      src={featuredImage.url}
-                      alt={featuredImage.altText}
-                      priority
-                    />
-                  )}
+                  <Tab.Group as='div' className='flex flex-col-reverse'>
+                    {/* Image selector */}
+                    <div className='mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none'>
+                      <Tab.List className='grid grid-cols-4 gap-6'>
+                        {images?.map(({ node }) => (
+                          <Tab
+                            key={node.id}
+                            className='relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4'
+                          >
+                            {({ selected }) => (
+                              <>
+                                <span className='absolute inset-0 overflow-hidden rounded-md'>
+                                  <img
+                                    src={node.url}
+                                    alt={node.alt}
+                                    className='h-full w-full object-cover object-center'
+                                  />
+                                </span>
+                                <span
+                                  className={classNames(
+                                    selected
+                                      ? 'ring-indigo-500'
+                                      : 'ring-transparent',
+                                    'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2',
+                                  )}
+                                  aria-hidden='true'
+                                />
+                              </>
+                            )}
+                          </Tab>
+                        ))}
+                      </Tab.List>
+                    </div>
+
+                    <Tab.Panels className='aspect-w-1 aspect-h-1 w-full px-16'>
+                      {images?.map(({ node }) => (
+                        <Tab.Panel key={node.id}>
+                          <img
+                            src={node.url}
+                            alt={node.alt}
+                            className='h-full w-full object-cover object-center sm:rounded-lg'
+                          />
+                        </Tab.Panel>
+                      ))}
+                    </Tab.Panels>
+                  </Tab.Group>
                 </div>
               </div>
             </div>

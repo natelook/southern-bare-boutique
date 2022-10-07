@@ -12,6 +12,7 @@ export default function ProductPage({ product, collections }: any) {
         title={product?.title}
         price={product?.priceRange?.maxVariantPrice?.amount}
         featuredImage={product?.featuredImage}
+        images={product?.images.edges}
         sizes={product?.variants?.edges}
         description={product?.descriptionHtml}
         tags={product?.tags}
