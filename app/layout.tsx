@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import Header from './header'
-import Footer from './footer'
-import Cart from './cart'
+import Header from '../components/header'
+import Footer from '../components/footer'
+import Cart from '../components/cart'
 import { QUERY_CART } from '../graphql/queries'
 import { useQuery } from '@apollo/client'
-import Meta from './meta'
+import Meta from '../components/meta'
 import { cartIdVar } from '../lib/reactiveVars'
-import GoogleAnalytics from './ga'
+import GoogleAnalytics from '../components/ga'
 import classNames from 'classnames'
-import { Collections } from '../lib/types'
+import { getCollections } from '../lib/collections'
 
 interface LayoutProps {
   children: React.ReactChild
   title?: string
-  collections: Collections[]
 }
 
-export default function Layout({ children, title, collections }: LayoutProps) {
+export default async function Layout({ children, title }: LayoutProps) {
   const [cartOpen, setCartOpen] = useState(false)
   const [cartId, setCartId] = useState<string | null>(null)
 
@@ -43,6 +42,8 @@ export default function Layout({ children, title, collections }: LayoutProps) {
       refetch()
     }
   }, [refetch])
+
+  const collections = await getCollections()
 
   // useEffect(() => {
   //   function getCartId() {

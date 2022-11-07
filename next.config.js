@@ -8,6 +8,7 @@ const nextConfig = {
     SHOPIFY_URL: process.env.SHOPIFY_URL,
     SHOPIFY_API_KEY: process.env.SHOPIFY_API_KEY,
   },
-};
+  experimental: { appDir: true },
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

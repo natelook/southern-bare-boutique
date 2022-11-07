@@ -1,18 +1,18 @@
-import { useMutation } from '@apollo/client';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import Link from 'next/link';
-import { AiOutlineClose } from 'react-icons/ai';
-import { FiTrash } from 'react-icons/fi';
-import { REMOVE_ITEM_FROM_CART } from '../graphql/queries';
+import { useMutation } from '@apollo/client'
+import { motion } from 'framer-motion'
+import Image from 'next/image'
+import Link from 'next/link'
+import { AiOutlineClose } from 'react-icons/ai'
+import { FiTrash } from 'react-icons/fi'
+import { REMOVE_ITEM_FROM_CART } from '../graphql/queries'
 
 interface CartProps {
-  isOpen: boolean;
-  close: () => void;
-  loading: boolean;
-  data: any;
-  cartId: string | null;
-  innerHeight: number | null;
+  isOpen: boolean
+  close: () => void
+  loading: boolean
+  data: any
+  cartId: string | null
+  innerHeight: number | null
 }
 
 export default function Cart({
@@ -77,20 +77,20 @@ export default function Cart({
         </div>
       )}
     </motion.div>
-  );
+  )
 }
 
 interface CartItemProps {
   item: {
-    id: string;
-    image: string;
-    title: string;
-    quanity: number;
-    price: number;
-    size: 'XS' | 'SM' | 'MD' | 'LG' | 'XL';
-  };
-  remove?: () => void;
-  cartId: string | null;
+    id: string
+    image: string
+    title: string
+    quanity: number
+    price: number
+    size: 'XS' | 'SM' | 'MD' | 'LG' | 'XL'
+  }
+  remove?: () => void
+  cartId: string | null
 }
 
 function getSizeName(size: string) {
@@ -104,21 +104,21 @@ function getSizeName(size: string) {
     ? 'Large'
     : size === 'XL'
     ? 'Extra Large'
-    : '';
+    : ''
 }
 
 function CartItem({ item, cartId }: CartItemProps) {
-  const { image, title, quanity, price, id, size } = item;
+  const { image, title, quanity, price, id, size } = item
 
-  const longSizeName = getSizeName(size);
-  const [removeFromCart] = useMutation(REMOVE_ITEM_FROM_CART);
+  const longSizeName = getSizeName(size)
+  const [removeFromCart] = useMutation(REMOVE_ITEM_FROM_CART)
 
   const remove = async () => {
     await removeFromCart({
       variables: { cartId, itemsId: id },
       refetchQueries: 'active',
-    });
-  };
+    })
+  }
 
   return (
     <div className='grid grid-cols-2 gap-x-5 border-b border-gray-200 last:border-b-0 pb-5'>
@@ -144,5 +144,5 @@ function CartItem({ item, cartId }: CartItemProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }
