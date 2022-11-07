@@ -107,7 +107,7 @@ export default function Product({
         <main className="pt-8 max-w-2xl mx-auto pb-16 px-4 sm:pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <div className="lg:grid lg:grid-cols-12 lg:auto-rows-min lg:gap-x-8">
             <ProductHead price={price} title={title} />
-            <ProductImages images={images} />
+            <ProductImages images={images} title={title} />
             <div className="mt-8 lg:col-span-5">
               <form onSubmit={(e) => e.preventDefault()}>
                 <div className="mt-8">
