@@ -29,6 +29,7 @@ export default function Cart({
     queryKey: ["cartId", cartId],
     queryFn: () => getCartItems(cartId),
     onSuccess: (data) => {
+      if (!data?.data) return
       setItemsInCart(data.data.cart.lines.edges.length)
     },
     refetchInterval: 1000,
