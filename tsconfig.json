@@ -23,7 +23,7 @@
     "paths": {
       "@components/*": ["components/*"],
       "@lib/*": ["lib/*"],
-      "@queries": ["graphql/queries.ts"]
+      "@queries": ["lib/graphql/queries.ts"]
     }
   },
   "include": [

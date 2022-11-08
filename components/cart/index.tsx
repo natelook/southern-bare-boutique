@@ -2,14 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query"
 import { motion } from "framer-motion"
-import Image from "next/image"
 import Link from "next/link"
 import { AiOutlineClose } from "react-icons/ai"
-import { QUERY_CART, REMOVE_ITEM_FROM_CART } from "../graphql/queries"
-import shopify from "@lib/shopify"
-import { cartIdAtom, itemsInCartAtom } from "./cart-state"
+import { cartIdAtom, itemsInCartAtom } from "./state"
 import { useAtom } from "jotai"
-import CartItem from "./cart/item"
+import CartItem from "./item"
+import { getCartItems } from "@lib/requests"
 
 interface CartProps {
   isOpen: boolean
@@ -18,12 +16,6 @@ interface CartProps {
   data: any
   cartId: string | null
   innerHeight: number | null
-}
-
-const getCartItems = async (cartId: string | null) => {
-  if (!cartId) return null
-  const data = await shopify({ query: QUERY_CART }, { cartId })
-  return data.json()
 }
 
 export default function Cart({

@@ -1,25 +1,13 @@
 "use client"
 
 import { useMutation } from "@tanstack/react-query"
-import graphql from "@lib/graphql"
 import { CartItemProps } from "@lib/types"
 import { getSizeName } from "@lib/utils"
-import { REMOVE_ITEM_FROM_CART } from "@queries"
 import Image from "next/image"
 import { FiTrash } from "react-icons/fi"
-import { cartIdAtom } from "@components/cart-state"
+import { cartIdAtom } from "@components/cart/state"
 import { useAtom } from "jotai"
-
-const removeFromCart = async ({
-  cartId,
-  itemsId,
-}: {
-  cartId: string | null
-  itemsId: string
-}) => {
-  if (!cartId) return
-  return await graphql.request(REMOVE_ITEM_FROM_CART, { cartId, itemsId })
-}
+import { removeFromCart } from "@lib/requests"
 
 export default function CartItem({ item, refetch }: CartItemProps) {
   const { image, title, quanity, price, id, size } = item

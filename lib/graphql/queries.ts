@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client"
+import { gql } from "graphql-request"
 
-export const PRODUCTS = `
+export const PRODUCTS = gql`
   query PRODUCTS(
     $list: Int!
     $featuredHeight: Int = 900
@@ -32,7 +32,7 @@ export const PRODUCTS = `
   }
 `
 
-export const GET_SINGLE_PRODUCT = `
+export const GET_SINGLE_PRODUCT = gql`
   query getProduct($handle: String!) {
     product(handle: $handle) {
       id
@@ -99,7 +99,7 @@ export const GET_RELATED_PRODUCTS = gql`
   }
 `
 
-export const QUERY_CART = `
+export const QUERY_CART = gql`
   query getCart($cartId: ID!) {
     cart(id: $cartId) {
       checkoutUrl
@@ -298,7 +298,7 @@ export const QUERY_FEATURED_COLLECTION = gql`
   }
 `
 
-export const COLLECTIONS = `
+export const COLLECTIONS = gql`
   query getCollections {
     collections(first: 20) {
       edges {
@@ -312,7 +312,7 @@ export const COLLECTIONS = `
   }
 `
 
-export const GET_COLLECTION = `
+export const GET_COLLECTION = gql`
   query getCollection($handle: String!) {
     collection(handle: $handle) {
       title

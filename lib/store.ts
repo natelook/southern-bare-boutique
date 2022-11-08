@@ -1,6 +1,6 @@
 import { GraphQLClient } from "graphql-request"
 
-const graphql = new GraphQLClient(
+const store = new GraphQLClient(
   `${process.env.SHOPIFY_URL}/api/2022-01/graphql.json`,
   {
     headers: {
@@ -9,4 +9,4 @@ const graphql = new GraphQLClient(
   }
 )
 
-export default graphql
+export default store

@@ -61,3 +61,7 @@ export interface CartItemProps {
 
   refetch: () => void
 }
+
+export type Collection = {
+  collection: { title: string; products: { edges: any[] } }
+}

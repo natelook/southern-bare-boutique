@@ -2,15 +2,19 @@
 
 import { Fragment, useEffect, useState } from "react"
 import { RadioGroup } from "@headlessui/react"
-import classNames from "../../lib/classNames"
+import classNames from "classnames"
 import ProductHead from "./head"
 import ProductImages from "./images"
 import ProductDetails from "./details"
 import { useMutation } from "@tanstack/react-query"
-import { ADD_TO_CART, CREATE_CART, SIMPLE_CREATE_CART } from "@queries"
+import {
+  ADD_TO_CART,
+  CREATE_CART,
+  SIMPLE_CREATE_CART,
+} from "@lib/graphql/queries"
 import { useAtom } from "jotai"
-import { cartIdAtom, itemsInCartAtom } from "@components/cart-state"
-import graphql from "@lib/graphql"
+import { cartIdAtom, itemsInCartAtom } from "@components/cart/state"
+import store from "@lib/store"
 
 export interface ProductProps {
   title: string
@@ -48,8 +52,8 @@ const addToCart = async ({
   itemId: string
   cartId: string | null
 }) => {
-  if (cartId) return await graphql.request(ADD_TO_CART, { itemId, cartId })
-  return await graphql.request(CREATE_CART, { itemId, cartId })
+  if (cartId) return await store.request(ADD_TO_CART, { itemId, cartId })
+  return await store.request(CREATE_CART, { itemId, cartId })
 }
 
 export default function Product({
@@ -69,7 +73,6 @@ export default function Product({
 
   const mutation = useMutation(addToCart, {
     onSuccess: (data) => {
-      console.log(data)
       setAddedToCart(true)
       if (data.cartCreate) {
         localStorage.setItem("cart", JSON.stringify(data.cartCreate.cart.id))

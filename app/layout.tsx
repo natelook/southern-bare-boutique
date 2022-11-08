@@ -1,13 +1,13 @@
 import "../styles/globals.css"
-import Header from "@components/header"
-import Footer from "@components/footer"
+import Header from "@components/ui/header"
+import Footer from "@components/ui/footer"
 import { getCollections } from "@lib/requests"
-import CartState from "@components/cart-state"
+import CartState from "@components/cart/state"
 import React from "react"
-import QueryProvider from "@components/query-provider"
+import QueryProvider from "@components/utils/query-provider"
 
 export default async function Layout({ children }: any) {
-  const { data } = await getCollections()
+  const { collections } = await getCollections()
 
   return (
     <html>
@@ -15,7 +15,7 @@ export default async function Layout({ children }: any) {
         <QueryProvider>
           <CartState>
             <>
-              <Header collections={data.collections.edges} />
+              <Header collections={collections.edges} />
               <div className="bg-white">{children}</div>
               <Footer />
             </>

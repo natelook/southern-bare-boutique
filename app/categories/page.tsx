@@ -1,15 +1,13 @@
 import Link from "next/link"
-import PageContainer from "@components/page-container"
+import Container from "@components/ui/container"
 import { getCollections } from "@lib/requests"
 
 export default async function CollectionsPage() {
   const {
-    data: {
-      collections: { edges: collections },
-    },
+    collections: { edges: collections },
   } = await getCollections()
   return (
-    <PageContainer>
+    <Container>
       <div className="text-center">
         <h1 className="text-5xl font-bold text-gray-900 font-sacramento mb-5">
           Categories
@@ -22,6 +20,6 @@ export default async function CollectionsPage() {
           ))}
         </ul>
       </div>
-    </PageContainer>
+    </Container>
   )
 }

@@ -1,24 +1,10 @@
 import Link from "next/link"
 import React from "react"
-import ProductCard from "@components/product-card"
-import { PRODUCTS } from "@queries"
-import shopify from "@lib/shopify"
-
-async function getProducts() {
-  const data = await shopify(
-    { query: PRODUCTS },
-    {
-      list: 8,
-      featuredHeight: 640,
-      featuredWidth: 560,
-    }
-  )
-
-  return data.json()
-}
+import ProductCard from "@components/product/card"
+import { getProducts } from "@lib/requests"
 
 export default async function Home() {
-  const { data } = await getProducts()
+  const data = await getProducts()
   return (
     <main className="bg-white">
       <section className="container mx-auto py-10">

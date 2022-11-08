@@ -1,7 +1,7 @@
 import { Tab } from "@headlessui/react"
 import Image from "next/image"
 import { useMemo } from "react"
-import classNames from "../../lib/classNames"
+import classNames from "classnames"
 
 /* eslint-disable @next/next/no-img-element */
 
