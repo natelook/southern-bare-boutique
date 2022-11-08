@@ -17,11 +17,11 @@ export default function Cart({ close, innerHeight }: CartProps) {
     queryKey: ["cartId", cartId],
     queryFn: () => getCartItems(cartId),
     onSuccess: (data) => {
-      if (!data?.data) return
-      setItemsInCart(data.data.cart.lines.edges.length)
+      if (!data) return
+      setItemsInCart(data.cart.lines.edges.length)
     },
-    refetchInterval: 1000,
   })
+
   return (
     <motion.div
       initial={{ x: 500 }}
@@ -39,10 +39,8 @@ export default function Cart({ close, innerHeight }: CartProps) {
           </button>
         </div>
         <div className="mt-10 space-y-5 px-5">
-          {!isLoading &&
-          data?.data &&
-          data?.data?.cart?.lines?.edges.length !== 0 ? (
-            data?.data?.cart?.lines?.edges.map(({ node }: any) => (
+          {!isLoading && data && data?.cart?.lines?.edges.length !== 0 ? (
+            data?.cart?.lines?.edges.map(({ node }: any) => (
               <CartItem
                 key={node.merchandise.id}
                 item={{
