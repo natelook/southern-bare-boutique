@@ -72,3 +72,12 @@ export interface CartItemProps {
 export type Collection = {
   collection: { title: string; products: { edges: any[] } }
 }
+
+export interface CartProps {
+  isOpen: boolean
+  close: () => void
+  loading: boolean
+  data: any
+  cartId: string | null
+  innerHeight: number | null
+}

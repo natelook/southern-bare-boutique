@@ -8,23 +8,11 @@ import { cartIdAtom, itemsInCartAtom } from "./state"
 import { useAtom } from "jotai"
 import CartItem from "./item"
 import { getCartItems } from "@lib/requests"
+import { CartProps } from "@lib/types"
 
-interface CartProps {
-  isOpen: boolean
-  close: () => void
-  loading: boolean
-  data: any
-  cartId: string | null
-  innerHeight: number | null
-}
-
-export default function Cart({
-  isOpen = false,
-  close,
-  innerHeight,
-}: CartProps) {
+export default function Cart({ close, innerHeight }: CartProps) {
   const [cartId] = useAtom(cartIdAtom)
-  const [itemsInCart, setItemsInCart] = useAtom(itemsInCartAtom)
+  const [_, setItemsInCart] = useAtom(itemsInCartAtom)
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["cartId", cartId],
     queryFn: () => getCartItems(cartId),
