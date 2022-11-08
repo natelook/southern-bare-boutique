@@ -1,7 +1,7 @@
 "use client"
 
 import { itemsInCartAtom } from "@components/cart-state"
-import { ShoppingBagIcon } from "@heroicons/react/solid"
+import { ShoppingBagIcon } from "@heroicons/react/outline"
 import { useAtom } from "jotai"
 
 export default function CartIcon() {

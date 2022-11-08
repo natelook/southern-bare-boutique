@@ -15,24 +15,14 @@ interface HeaderProps {
 }
 
 export default function Header({ collections }: HeaderProps) {
-  // console.log({ isOpen })
-  // const collections = await getCollections()
-
   const [cartOpen, setCartOpen] = useState(false)
   const [isCategoriesOpen, setCategoriesOpen] = useState(false)
-  const [cartId, setCartId] = useState<string | null>(null)
   const [innerHeight, setInnerHeight] = useState<null | number>(null)
 
   useEffect(() => {
     setInnerHeight(window.innerHeight)
   }, [cartOpen])
 
-  useEffect(() => {
-    if (window.localStorage.getItem("cartId")) {
-      setCartId(window.localStorage.getItem("cartId"))
-      // cartIdVar(window.localStorage.getItem("cartId"))
-    }
-  }, [])
   return (
     <React.Fragment>
       <header className="bg-white border select-none">
