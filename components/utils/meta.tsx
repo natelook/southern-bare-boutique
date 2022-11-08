@@ -1,14 +1,8 @@
-"use client"
+import React from "react"
 
-import Head from "next/head"
-
-interface MetaProps {
-  title?: string
-}
-
-export default function Meta({ title }: MetaProps) {
+export default function Meta() {
   return (
-    <Head>
+    <React.Fragment>
       <link
         rel="apple-touch-icon"
         sizes="180x180"
@@ -34,7 +28,7 @@ export default function Meta({ title }: MetaProps) {
       />
       <meta name="msapplication-TileColor" content="#9f00a7" />
       <meta name="theme-color" content="#ffffff" />
-      <title>{title && `${title} | `}Southern Bare Boutique</title>
-    </Head>
+      <title>Southern Bare Boutique</title>
+    </React.Fragment>
   )
 }
