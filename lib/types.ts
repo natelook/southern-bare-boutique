@@ -29,7 +29,6 @@ export interface Collections {
 export interface ProductProps {
   title: string
   price: number
-  handle: string
   featuredImage: {
     id: string
     url: string
@@ -37,8 +36,16 @@ export interface ProductProps {
     width: number
     altText?: string
   }
+  images?: {
+    node: {
+      url: string
+      id: string
+      alt: string
+    }
+  }[]
   sizes: {
     node: {
+      availableForSale: boolean
       id: string
       title: string
       currentlyNotInStock: boolean
@@ -46,7 +53,7 @@ export interface ProductProps {
   }[]
   description?: string
   id: string
-  priceRange: { minVariantPrice: { amount: number } }
+  tags?: string[]
 }
 
 export interface CartItemProps {

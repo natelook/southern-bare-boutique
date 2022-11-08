@@ -69,7 +69,7 @@ export const GET_SINGLE_PRODUCT = gql`
           node {
             id
             title
-            currentlyNotInStock
+            availableForSale
           }
         }
       }

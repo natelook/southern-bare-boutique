@@ -1,6 +1,8 @@
 import type { Collection, Collections, ProductProps } from "./types"
 import {
+  ADD_TO_CART,
   COLLECTIONS,
+  CREATE_CART,
   GET_COLLECTION,
   GET_SINGLE_PRODUCT,
   PRODUCTS,
@@ -46,4 +48,15 @@ export const removeFromCart = async ({
 }) => {
   if (!cartId) return
   return await store.request(REMOVE_ITEM_FROM_CART, { cartId, itemsId })
+}
+
+export const addToCart = async ({
+  itemId,
+  cartId,
+}: {
+  itemId: string
+  cartId: string | null
+}) => {
+  if (cartId) return await store.request(ADD_TO_CART, { itemId, cartId })
+  return await store.request(CREATE_CART, { itemId })
 }

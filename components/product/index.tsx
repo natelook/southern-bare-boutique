@@ -7,59 +7,14 @@ import ProductHead from "./head"
 import ProductImages from "./images"
 import ProductDetails from "./details"
 import { useMutation } from "@tanstack/react-query"
-import {
-  ADD_TO_CART,
-  CREATE_CART,
-  SIMPLE_CREATE_CART,
-} from "@lib/graphql/queries"
 import { useAtom } from "jotai"
 import { cartIdAtom, itemsInCartAtom } from "@components/cart/state"
-import store from "@lib/store"
-
-export interface ProductProps {
-  title: string
-  price: number
-  featuredImage: {
-    id: string
-    url: string
-    height: number
-    width: number
-    altText?: string
-  }
-  images?: {
-    node: {
-      url: string
-      id: string
-      alt: string
-    }
-  }[]
-  sizes: {
-    node: {
-      id: string
-      title: string
-      currentlyNotInStock: boolean
-    }
-  }[]
-  description?: string
-  id: string
-  tags?: string[]
-}
-
-const addToCart = async ({
-  itemId,
-  cartId,
-}: {
-  itemId: string
-  cartId: string | null
-}) => {
-  if (cartId) return await store.request(ADD_TO_CART, { itemId, cartId })
-  return await store.request(CREATE_CART, { itemId, cartId })
-}
+import { addToCart } from "@lib/requests"
+import { ProductProps } from "@lib/types"
 
 export default function Product({
   title,
   price,
-  featuredImage,
   images,
   sizes,
   description,
@@ -69,7 +24,7 @@ export default function Product({
   const [addedToCart, setAddedToCart] = useState(false)
   const [preorderItem, setPreorderItem] = useState(false)
   const [cartId, setCartId] = useAtom(cartIdAtom)
-  const [itemsInCart, setItemsInCart] = useAtom(itemsInCartAtom)
+  const [_, setItemsInCart] = useAtom(itemsInCartAtom)
 
   const mutation = useMutation(addToCart, {
     onSuccess: (data) => {
@@ -100,15 +55,6 @@ export default function Product({
     }
   }, [tags])
 
-  // const { data: relatedProducts, loading } = useQuery(PRODUCTS, {
-  //   variables: { list: 4, featuredHeight: 640, featuredWidth: 560 },
-  // })
-
-  // const [createCart] = useMutation(CREATE_CART)
-  // const [addToCart] = useMutation(ADD_TO_CART, {
-  //   refetchQueries: [QUERY_CART],
-  // })
-
   return (
     <Fragment>
       <div className="bg-white">
@@ -135,7 +81,7 @@ export default function Product({
                             value={node.id}
                             className={({ active, checked }) =>
                               classNames(
-                                !node.currentlyNotInStock
+                                node.availableForSale
                                   ? "cursor-pointer focus:outline-none"
                                   : "opacity-25 cursor-not-allowed",
                                 active ? "ring-2 ring-offset-2 ring-blue" : "",
@@ -145,10 +91,15 @@ export default function Product({
                                 "border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1 w-full"
                               )
                             }
-                            disabled={node.currentlyNotInStock}
+                            disabled={!node.availableForSale}
                           >
                             <RadioGroup.Label as="p">
-                              {node.title}
+                              <div className="flex flex-col space-y-2 text-center">
+                                <span>{node.title}</span>
+                                {!node.availableForSale && (
+                                  <span className="text-xs">Out of stock</span>
+                                )}
+                              </div>
                             </RadioGroup.Label>
                           </RadioGroup.Option>
                         ))}
