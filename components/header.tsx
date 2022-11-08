@@ -1,109 +1,116 @@
-import { ShoppingBagIcon } from '@heroicons/react/outline'
-import { AnimatePresence, motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { BsChevronDown } from 'react-icons/bs'
-import { Collections } from '../lib/types'
+"use client"
 
-const fakeCategories = [
-  { name: 'Basics', slug: '/basics' },
-  { name: 'Tops', slug: '/tops' },
-  { name: 'Dresses', slug: '/dresses' },
-  { name: 'Sweaters', slug: '/sweaters' },
-  { name: 'Bottoms', slug: '/bottoms' },
-  { name: 'Denim', slug: '/denim' },
-  { name: 'Sets', slug: '/sets' },
-]
+import type { Collections } from "../lib/types"
+import { ShoppingBagIcon } from "@heroicons/react/outline"
+import { AnimatePresence, motion } from "framer-motion"
+import Image from "next/image"
+import Link from "next/link"
+import React, { useEffect, useState } from "react"
+import { BsChevronDown } from "react-icons/bs"
+import Cart from "./cart"
+import CartIcon from "./cart/icon"
 
 interface HeaderProps {
-  cartItems: number
-  openCart: () => void
   collections: Collections[]
 }
 
-export default function Header({
-  cartItems,
-  openCart,
-  collections,
-}: HeaderProps) {
+export default function Header({ collections }: HeaderProps) {
+  // console.log({ isOpen })
+  // const collections = await getCollections()
+
+  const [cartOpen, setCartOpen] = useState(false)
   const [isCategoriesOpen, setCategoriesOpen] = useState(false)
-  const router = useRouter()
+  const [cartId, setCartId] = useState<string | null>(null)
+  const [innerHeight, setInnerHeight] = useState<null | number>(null)
+
   useEffect(() => {
-    router.events.on('routeChangeStart', () => setCategoriesOpen(false))
-  }, [router.events])
+    setInnerHeight(window.innerHeight)
+  }, [cartOpen])
+
+  useEffect(() => {
+    if (window.localStorage.getItem("cartId")) {
+      setCartId(window.localStorage.getItem("cartId"))
+      // cartIdVar(window.localStorage.getItem("cartId"))
+    }
+  }, [])
   return (
-    <header className='bg-white border select-none'>
-      <div className='flex justify-center items-center pt-4 pb-2'>
-        <div>
-          <div className='flex justify-center mb-3'>
-            <Link href='/'>
-              <a>
+    <React.Fragment>
+      <header className="bg-white border select-none">
+        <div className="flex justify-center items-center pt-4 pb-2">
+          <div>
+            <div className="flex justify-center mb-3">
+              <Link href="/" passHref>
                 <Image
-                  src='/logo-black.svg'
-                  height='42.5px'
-                  width='300px'
-                  alt='Southen Bare Boutique Logo'
+                  src="/logo-black.svg"
+                  height={42.5}
+                  width={300}
+                  alt="Southen Bare Boutique Logo"
                 />
-              </a>
-            </Link>
+              </Link>
+            </div>
+            <nav>
+              <ul className="flex justify-center md:space-x-20 space-x-5 ">
+                <li>
+                  <Link href="/">Home</Link>
+                </li>
+                <li>
+                  <Link href="/about">About</Link>
+                </li>
+                <li
+                  className="flex space-x-1 items-center cursor-pointer relative"
+                  onClick={() =>
+                    setCategoriesOpen(isCategoriesOpen ? false : true)
+                  }
+                >
+                  <span>Shop</span>
+                  <BsChevronDown size=".75em" />
+                  <AnimatePresence>
+                    {isCategoriesOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-8 -left-8 bg-white border px-8 pb-5 pt-4 border-gray-200 z-30 space-y-3"
+                      >
+                        {collections &&
+                          collections.map(({ node }) => (
+                            <li key={node.handle}>
+                              <Link
+                                href={`/categories/${node.handle}`}
+                                passHref
+                              >
+                                <span>{node.title}</span>
+                              </Link>
+                            </li>
+                          ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </li>
+                <li
+                  className="block h-6 w-6 relative text-gray-600"
+                  onClick={() => setCartOpen(true)}
+                >
+                  <CartIcon />
+                </li>
+              </ul>
+            </nav>
           </div>
-          <nav>
-            <ul className='flex justify-center md:space-x-20 space-x-5 '>
-              <li>
-                <Link href='/'>
-                  <a>Home</a>
-                </Link>
-              </li>
-              <li>
-                <Link href='/about'>
-                  <a>About</a>
-                </Link>
-              </li>
-              <li
-                className='flex space-x-1 items-center cursor-pointer relative'
-                onClick={() =>
-                  setCategoriesOpen(isCategoriesOpen ? false : true)
-                }
-              >
-                <span>Shop</span>
-                <BsChevronDown size='.75em' />
-                <AnimatePresence>
-                  {isCategoriesOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                      className='absolute top-8 -left-8 bg-white border px-8 pb-5 pt-4 border-gray-200 z-30 space-y-3'
-                    >
-                      {collections.map(({ node }) => (
-                        <li key={node.handle}>
-                          <Link href={`/categories/${node.handle}`}>
-                            <a>{node.title}</a>
-                          </Link>
-                        </li>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </li>
-              <li
-                className='block h-6 w-6 relative text-gray-600'
-                onClick={openCart}
-              >
-                <ShoppingBagIcon />
-                {cartItems !== null && cartItems > 0 && (
-                  <span className='text-white absolute -top-1 -right-2 bg-blue w-4 h-4 md:h-5 md:w-5 flex items-center justify-center rounded-full md:-top-2 md:-right-2 text-xs'>
-                    {cartItems}
-                  </span>
-                )}
-              </li>
-            </ul>
-          </nav>
         </div>
-      </div>
-    </header>
+      </header>
+      <AnimatePresence>
+        {cartOpen && (
+          <Cart
+            isOpen={cartOpen}
+            close={() => setCartOpen(false)}
+            data={null}
+            loading={false}
+            cartId={null}
+            innerHeight={innerHeight}
+          />
+        )}
+      </AnimatePresence>
+    </React.Fragment>
   )
 }

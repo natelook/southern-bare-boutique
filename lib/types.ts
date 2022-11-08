@@ -48,3 +48,16 @@ export interface ProductProps {
   id: string
   priceRange: { minVariantPrice: { amount: number } }
 }
+
+export interface CartItemProps {
+  item: {
+    id: string
+    image: string
+    title: string
+    quanity: number
+    price: number
+    size: "XS" | "SM" | "MD" | "LG" | "XL"
+  }
+
+  refetch: () => void
+}

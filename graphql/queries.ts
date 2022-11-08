@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client"
 
-export const PRODUCTS = gql`
+export const PRODUCTS = `
   query PRODUCTS(
     $list: Int!
     $featuredHeight: Int = 900
@@ -32,7 +32,7 @@ export const PRODUCTS = gql`
   }
 `
 
-export const GET_SINGLE_PRODUCT = gql`
+export const GET_SINGLE_PRODUCT = `
   query getProduct($handle: String!) {
     product(handle: $handle) {
       id
@@ -99,7 +99,7 @@ export const GET_RELATED_PRODUCTS = gql`
   }
 `
 
-export const QUERY_CART = gql`
+export const QUERY_CART = `
   query getCart($cartId: ID!) {
     cart(id: $cartId) {
       checkoutUrl
@@ -132,6 +132,16 @@ export const QUERY_CART = gql`
             }
           }
         }
+      }
+    }
+  }
+`
+
+export const SIMPLE_CREATE_CART = gql`
+  mutation {
+    cartCreate {
+      cart {
+        id
       }
     }
   }
@@ -178,7 +188,7 @@ export const CREATE_CART = gql`
   }
 `
 
-export const ADD_TO_CART = gql`
+export const ADD_TO_CART = `
   mutation ($cartId: ID!, $itemId: ID!) {
     cartLinesAdd(
       cartId: $cartId
@@ -288,7 +298,7 @@ export const QUERY_FEATURED_COLLECTION = gql`
   }
 `
 
-export const COLLECTIONS = gql`
+export const COLLECTIONS = `
   query getCollections {
     collections(first: 20) {
       edges {
@@ -302,7 +312,7 @@ export const COLLECTIONS = gql`
   }
 `
 
-export const GET_COLLECTION = gql`
+export const GET_COLLECTION = `
   query getCollection($handle: String!) {
     collection(handle: $handle) {
       title

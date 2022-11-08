@@ -1,18 +1,17 @@
+"use client"
+
 import { Fragment, useEffect, useState } from "react"
-import { RadioGroup, Tab } from "@headlessui/react"
+import { RadioGroup } from "@headlessui/react"
 import classNames from "../../lib/classNames"
-import {
-  ADD_TO_CART,
-  CREATE_CART,
-  PRODUCTS,
-  QUERY_CART,
-} from "../../graphql/queries"
-import { useMutation, useQuery } from "@apollo/client"
-import ProductCard from "../product-card"
-import { cartIdVar } from "../../lib/reactiveVars"
 import ProductHead from "./head"
 import ProductImages from "./images"
 import ProductDetails from "./details"
+import { useMutation } from "@tanstack/react-query"
+import shopify from "@lib/shopify"
+import { ADD_TO_CART, CREATE_CART, SIMPLE_CREATE_CART } from "@queries"
+import { useAtom } from "jotai"
+import { cartIdAtom, itemsInCartAtom } from "@components/cart-state"
+import graphql from "@lib/graphql"
 
 export interface ProductProps {
   title: string
@@ -43,6 +42,17 @@ export interface ProductProps {
   tags?: string[]
 }
 
+const addToCart = async ({
+  itemId,
+  cartId,
+}: {
+  itemId: string
+  cartId: string | null
+}) => {
+  if (cartId) return await graphql.request(ADD_TO_CART, { itemId, cartId })
+  return await graphql.request(CREATE_CART, { itemId, cartId })
+}
+
 export default function Product({
   title,
   price,
@@ -55,6 +65,23 @@ export default function Product({
   const [selectedSize, setSelectedSize] = useState(null)
   const [addedToCart, setAddedToCart] = useState(false)
   const [preorderItem, setPreorderItem] = useState(false)
+  const [cartId, setCartId] = useAtom(cartIdAtom)
+  const [itemsInCart, setItemsInCart] = useAtom(itemsInCartAtom)
+
+  const mutation = useMutation(addToCart, {
+    onSuccess: (data) => {
+      console.log(data)
+      setAddedToCart(true)
+      if (data.cartCreate) {
+        localStorage.setItem("cart", JSON.stringify(data.cartCreate.cart.id))
+        setCartId(data.cartCreate.cart.id)
+        setItemsInCart(1)
+        return
+      }
+
+      setItemsInCart(data.cartLinesAdd.cart.lines.edges.length)
+    },
+  })
 
   useEffect(() => {
     if (addedToCart) {
@@ -71,35 +98,14 @@ export default function Product({
     }
   }, [tags])
 
-  const { data: relatedProducts, loading } = useQuery(PRODUCTS, {
-    variables: { list: 4, featuredHeight: 640, featuredWidth: 560 },
-  })
+  // const { data: relatedProducts, loading } = useQuery(PRODUCTS, {
+  //   variables: { list: 4, featuredHeight: 640, featuredWidth: 560 },
+  // })
 
-  const [createCart] = useMutation(CREATE_CART)
-  const [addToCart] = useMutation(ADD_TO_CART, {
-    refetchQueries: [QUERY_CART],
-  })
-
-  const add = async () => {
-    const cartId = window.localStorage.getItem("cartId")
-
-    if (!selectedSize) return
-
-    if (!cartId) {
-      // Create new cart
-      const { data: cartCreation } = await createCart({
-        variables: { itemId: selectedSize },
-      })
-      cartIdVar(cartCreation.cartCreate.cart.id)
-      window.localStorage.setItem("cartId", cartCreation.cartCreate.cart.id)
-    } else {
-      // Add to currently stored cart
-      const { data: addedToCart } = await addToCart({
-        variables: { itemId: selectedSize, cartId },
-      })
-    }
-    setAddedToCart(true)
-  }
+  // const [createCart] = useMutation(CREATE_CART)
+  // const [addToCart] = useMutation(ADD_TO_CART, {
+  //   refetchQueries: [QUERY_CART],
+  // })
 
   return (
     <Fragment>
@@ -150,7 +156,10 @@ export default function Product({
 
                 <button
                   type="submit"
-                  onClick={add}
+                  onClick={() =>
+                    selectedSize &&
+                    mutation.mutate({ itemId: selectedSize, cartId })
+                  }
                   className="mt-8 w-full bg-blue border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white"
                 >
                   {!addedToCart
@@ -175,7 +184,7 @@ export default function Product({
             </h2>
 
             <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-              {!loading &&
+              {/* {!loading &&
                 relatedProducts &&
                 relatedProducts.products.edges.map(({ node }: any) => (
                   <ProductCard
@@ -186,7 +195,7 @@ export default function Product({
                     price={node.priceRange.minVariantPrice.amount}
                     href={node.handle}
                   />
-                ))}
+                ))} */}
             </div>
           </section>
         </main>
